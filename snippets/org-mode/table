@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: table
+# key: tb_
+# contributor: pcx <ddxgz19880813@gmail.com>
+# --
+#+CAPTION: ${1:caption}
+#+ATTR_HTML: :width 30% :height 30%
+#+ATTR_LaTeX: :float t
+#+LABEL: tb:${2:label}
