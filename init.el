@@ -722,8 +722,8 @@ you should place your code here."
        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+       (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
-       ;; (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
        (add-hook 'text-mode-hook 'visual-line-mode)
        (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
