@@ -31,34 +31,46 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     restclient
+     ;; restclient
      plantuml
      nginx
      yaml
      osx
      go
      ess
-     python
      csv
      html
      javascript
      bibtex
-     latex
+     ;; latex
+     (latex :variables
+            latex-build-command "LatexMk")
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     auto-completion
+     ;; auto-completion
+     (auto-completion :variables
+                      ;; can use C-l for completing selection
+                      auto-completion-return-key-behavior nil)
      ;; better-defaults
      emacs-lisp
      git
      markdown
      ;; org
      (org :variables
+          ;; export github flavored markdown
           org-enable-github-support t
+          ;; export Twitter Boostrap
           org-enable-bootstrap-support t)
+
+     ;; config for python layer
+     ;; python
+     (python :variables
+             python-fill-column 80
+             python-sort-imports-on-save t)
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -75,8 +87,8 @@ values."
                                       cdlatex
                                       ox-gfm
                                       ox-twbs
-                                      beacon
-                                      monokai-theme
+                                      ;; beacon
+                                      ;; monokai-theme
                                       ;;interleave
                                       yasnippet-snippets
                                       (vue-mode :location (recipe
@@ -339,38 +351,43 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (push '(use-package . "melpa-stable") package-pinned-packages)
 
   (setq-default
-    ;; Control line numbers activation.
-    ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
-    ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
-    ;; This variable can also be set to a property list for finer control:
-    ;; '(:relative nil
-    ;;   :disabled-for-modes dired-mode
-    ;;                       doc-view-mode
-    ;;                       markdown-mode
-    ;;                       org-mode
-    ;;                       pdf-view-mode
-    ;;                       text-mode
-    ;;   :size-limit-kb 1000)
-    ;; (default nil)
-    ;; dotspacemacs-line-numbers nil
-    dotspacemacs-line-numbers '(:relative t
-                                :disabled-for-modes dired-mode
-                                                    doc-view-mode
-                                                    markdown-mode
-                                                    org-mode
-                                                    pdf-view-mode
-                                                    text-mode
-                                :size-limit-kb 1000)
-                                ;; (default nil)
-                                )
+   ;; Control line numbers activation.
+   ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
+   ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+   ;; This variable can also be set to a property list for finer control:
+   ;; '(:relative nil
+   ;;   :disabled-for-modes dired-mode
+   ;;                       doc-view-mode
+   ;;                       markdown-mode
+   ;;                       org-mode
+   ;;                       pdf-view-mode
+   ;;                       text-mode
+   ;;   :size-limit-kb 1000)
+   ;; (default nil)
+   ;; dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers '(:relative t
+                                         :disabled-for-modes dired-mode
+                                         doc-view-mode
+                                         markdown-mode
+                                         org-mode
+                                         pdf-view-mode
+                                         text-mode
+                                         :size-limit-kb 1000)
+   ;; (default nil)
+   ;; dotspacemacs-configuration-layers '(
+   ;;     (org :variables
+   ;;         ;; export github flavored markdown
+   ;;         org-enable-github-support t
+   ;;         ;; export Twitter Boostrap
+   ;;         org-enable-bootstrap-support t)
 
-  ;; export github flavored markdown
-  (setq-default dotspacemacs-configuration-layers '(
-                                                    (org :variables org-enable-github-support t)))
-  ;; export Twitter Boostrap
-  (setq-default dotspacemacs-configuration-layers '(
-                                                    (org :variables
-                                                         org-enable-bootstrap-support t)))
+   ;;     ;; config for python layer
+   ;;     (python :variables
+   ;;             python-fill-column 99
+   ;;             python-sort-imports-on-save t)
+   ;; )
+
+   )
 
   ;; If non nil then the last auto saved layouts are resume automatically upon
   ;; start. (default nil)
@@ -380,7 +397,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
   ;; latex
   ;; for using xelatex to latex layer
- ;; "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+  ;; "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 
   ;; org-latex-pdf-process
   ;; '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -424,6 +441,7 @@ you should place your code here."
   ;; (define-key evil-normal-state-map
   ;;   (kbd "k") 'evil-previous-visual-line)
 
+
   ;; may delete after update, to fix load layouts problem
   ;; (require 'helm-bookmark)
 
@@ -435,8 +453,8 @@ you should place your code here."
   (setq powerline-default-separator 'utf-8)
   ;; (setq powerline-default-separator 'slant)
 
-  ;; blink cursur place
-  (beacon-mode 1)
+  ;; ;; blink cursur place
+  ;; (beacon-mode 1)
 
   ;; from lujun9972
   (setq scroll-margin 5
@@ -467,13 +485,20 @@ you should place your code here."
   (with-eval-after-load 'helm
     (setq helm-display-function 'helm-default-display-buffer))
 
-
   ;; for set flycheck to only check when save
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
 
   ;; ;; (flyspell nil)
   ;; (setq flyspell-issue-message-flag nil)
 
+
+  (use-package magit
+    :defer t)
+
+  (use-package sass-mode
+    :defer t)
+  (use-package julia-mode
+    :defer t)
 
   ;; ;; for layers ;; ;;
   ;; ;; for enable web-mode in default fot .tmpl
@@ -489,11 +514,14 @@ you should place your code here."
     (setq web-mode-enable-auto-indentation t)
     )
 
-  ;; (setq python-shell-interpreter "python2")
-  (require 'python)
-  ;; (add-to-list 'python-shell-extra-pythonpaths "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7")
-  ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python2.7/site-packages")
-  (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
+  (with-eval-after-load 'python
+    (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
+    )
+  ;; ;; (setq python-shell-interpreter "python2")
+  ;; (require 'python)
+  ;; ;; (add-to-list 'python-shell-extra-pythonpaths "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7")
+  ;; ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python2.7/site-packages")
+  ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
 
   ;; (use-package python
   ;;   :defer t
@@ -501,273 +529,270 @@ you should place your code here."
   ;;   (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
   ;;   )
 
-                                        ; use IPython
+  ;; use IPython
   (setq-default py-shell-name "ipython")
   (setq-default py-which-bufname "IPython")
-                                        ; use the wx backend, for both mayavi and matplotlib
+  ;; use the wx backend, for both mayavi and matplotlib
   (setq py-python-command-args
         '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
   (setq py-force-py-shell-name-p t)
 
-                                        ; switch to the interpreter after executing code
+  ;; switch to the interpreter after executing code
   (setq py-shell-switch-buffers-on-execute-p t)
   (setq py-switch-buffers-on-execute-p t)
-                                        ; don't split windows
+  ;; don't split windows
   (setq py-split-windows-on-execute-p nil)
-                                        ; try to automagically figure out indentation
+  ;; try to automagically figure out indentation
   (setq py-smart-indentation t)
 
-
-
   ;; ;; for org ;; ;;
-         ;; ;; Fontify the whole line for headings (with a background color).
+  ;; ;; Fontify the whole line for headings (with a background color).
   ;; (setq org-fontify-whole-heading-line t)
   (with-eval-after-load 'org
 
+    ;; turn on golden-ratio window resizing
+    ;; see: https://github.com/roman/golden-ratio.el
+    (golden-ratio-mode 1)
+    ;; line wrap in text mode
+    ;; (add-hook 'text-mode-hook 'visual-fill-column-mode)
+    ;; (add-hook 'text-mode-hook 'visual-line-mode)
+    ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
-         ;; turn on golden-ratio window resizing
-         ;; see: https://github.com/roman/golden-ratio.el
-         (golden-ratio-mode 1)
-         ;; line wrap in text mode
-         ;; (add-hook 'text-mode-hook 'visual-fill-column-mode)
-         ;; (add-hook 'text-mode-hook 'visual-line-mode)
-         ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
+    (setq org-export-with-smart-quotes t)
+    ;;
+    (setq org-image-actual-width nil)
 
-         (setq org-export-with-smart-quotes t)
-         ;;
-         (setq org-image-actual-width nil)
+    ;; org-download screenshot method
+    (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s")
+    ;; (setq org-download-screenshot-method "screencapture")
 
-         ;; org-download screenshot method
-         (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s")
-         ;; (setq org-download-screenshot-method "screencapture")
+    ;; set for org-capture
+    ;; (setq org-default-notes-file (concat org-directory "/capture.org"))
+    ;; (setq org-default-notes-file (org-directory "/Users/pc/Dropbox/Textnotes/capture.org"))
 
-         ;; set for org-capture
-         ;; (setq org-default-notes-file (concat org-directory "/capture.org"))
-         ;; (setq org-default-notes-file (org-directory "/Users/pc/Dropbox/Textnotes/capture.org"))
+    (setq org-capture-templates
+          '(
+            ;; ("a" "Appointment" entry (file  "~/Dropbox/Textnotes/gcal.org" "Appointments")
+            ;;  "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
+            ("n" "Note" entry (file+headline "~/Dropbox/Textnotes/notes.org" "Captured Notes")
+             "* Note %?\nCreated: %T")
+            ;; ("l" "Link" entry (file+headline "~/Dropbox/Textnotes/links.org" "Links")
+            ;;  "* %? %^L %^g \n%T" :prepend t)
+            ;; ("b" "Blog idea" entry (file+headline "~/Dropbox/Textnotes/i.org" "Blog Topics:")
+            ;;  "* %?\n%T" :prepend t)
+            ("p" "Paper" entry (file+headline "~/Dropbox/Textnotes/PhD/unread-papers.org" "Papers Captured")
+             "* TODO %? \n:PROPERTIES:\nCreated: %T\n:END:\n" :prepend t)
+            ("t" "TODO Item" entry (file+headline "~/Dropbox/Orgzly/tasks.org" "Captured TODO Items")
+             "* TODO %? \n:PROPERTIES:\n:Created: %U\n:END:\n\n\n")
 
-         (setq org-capture-templates
-               '(
-                 ;; ("a" "Appointment" entry (file  "~/Dropbox/Textnotes/gcal.org" "Appointments")
-	               ;;  "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-	               ("n" "Note" entry (file+headline "~/Dropbox/Textnotes/notes.org" "Captured Notes")
-	                "* Note %?\nCreated: %T")
-	               ;; ("l" "Link" entry (file+headline "~/Dropbox/Textnotes/links.org" "Links")
-	               ;;  "* %? %^L %^g \n%T" :prepend t)
-	               ;; ("b" "Blog idea" entry (file+headline "~/Dropbox/Textnotes/i.org" "Blog Topics:")
-	               ;;  "* %?\n%T" :prepend t)
-	               ("p" "Paper" entry (file+headline "~/Dropbox/Textnotes/PhD/unread-papers.org" "Papers Captured")
-	               "* TODO %? \n:PROPERTIES:\nCreated: %T\n:END:\n" :prepend t)
-	               ("t" "TODO Item" entry (file+headline "~/Dropbox/Orgzly/tasks.org" "Captured TODO Items")
-	                "* TODO %? \n:PROPERTIES:\n:Created: %U\n:END:\n\n\n")
+            ("a"               ; key
+             "Article"         ; name
+             entry             ; type
+             (file+headline "~/Dropbox/Textnotes/PhD/articles.org" "Article Captured")  ; target
+             "* TODO %? \n:PROPERTIES:\n:Created: %U\n:Linked: %a\n:END:\n%i\n"  ; template
+             ;; :prepend t        ; properties
+             :empty-lines 1    ; properties
+             ;; :created t        ; properties
+             )
 
-                 ("a"               ; key
-                  "Article"         ; name
-                  entry             ; type
-                  (file+headline "~/Dropbox/Textnotes/PhD/articles.org" "Article Captured")  ; target
-                  "* TODO %? \n:PROPERTIES:\n:Created: %U\n:Linked: %a\n:END:\n%i\n"  ; template
-                  ;; :prepend t        ; properties
-                  :empty-lines 1    ; properties
-                  ;; :created t        ; properties
-                  )
+            ;; ("j" "Journal" entry (file+datetree "~/Dropbox/journal.org")
+            ;;  "* %?\nEntered on %U\n  %i\n  %a")
+            ;; ("s" "Screencast" entry (file "~/Dropbox/Textnotes/screencastnotes.org")
+            ;;  "* %?\n%i\n")
+            ))
 
-	               ;; ("j" "Journal" entry (file+datetree "~/Dropbox/journal.org")
-	               ;;  "* %?\nEntered on %U\n  %i\n  %a")
-	               ;; ("s" "Screencast" entry (file "~/Dropbox/Textnotes/screencastnotes.org")
-	               ;;  "* %?\n%i\n")
-                 ))
+    ;; ;; add some awesome new text objects!
+    ;; (spacemacs|define-text-object "[" "brackets" "[" "]")
+    ;; (spacemacs|define-text-object "(" "parentheses" "(" ")")
 
-         ;; ;; add some awesome new text objects!
-         ;; (spacemacs|define-text-object "[" "brackets" "[" "]")
-         ;; (spacemacs|define-text-object "(" "parentheses" "(" ")")
+    ;; ;; to set done item strikethrough
+    ;; (setq org-fontify-done-headline t)
+    ;; (custom-set-faces
+    ;;  '(org-done ((t (:foreground "PaleGreen"
+    ;;                              :weight normal
+    ;;                              :strike-through t))))
+    ;;  '(org-headline-done
+    ;;    ((((class color) (min-colors 16) (background dark))
+    ;;      (:foreground "LightSalmon" :strike-through t)))))
 
-         ;; ;; to set done item strikethrough
-         ;; (setq org-fontify-done-headline t)
-         ;; (custom-set-faces
-         ;;  '(org-done ((t (:foreground "PaleGreen"
-         ;;                              :weight normal
-         ;;                              :strike-through t))))
-         ;;  '(org-headline-done
-         ;;    ((((class color) (min-colors 16) (background dark))
-         ;;      (:foreground "LightSalmon" :strike-through t)))))
+    ;; colors in spacemacs https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
+    (setq org-todo-keyword-faces
+          '(
+            ;; ("TODO" . "orange")
+            ("STARTED" . "yellow")
+            ("MINOR" . "yellow")
+            ("HALF" . "yellow")
+            ("USEFUL" . "red")
+            ("WAIT" . "grey")
+            ("CANCELED" . (:foreground "blue" :weight bold :strike-through t))
+            ;; ("DONE" . (:background "gren-bg" :weight bold :strike-through t))
+            ("DONE" . (:weight bold :strike-through t))
+            ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
+            ))
 
-         ;; colors in spacemacs https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
-         (setq org-todo-keyword-faces
-               '(
-                 ;; ("TODO" . "orange")
-                 ("STARTED" . "yellow")
-                 ("MINOR" . "yellow")
-                 ("HALF" . "yellow")
-                 ("USEFUL" . "red")
-                 ("WAIT" . "grey")
-                 ("CANCELED" . (:foreground "blue" :weight bold :strike-through t))
-                 ;; ("DONE" . (:background "gren-bg" :weight bold :strike-through t))
-                 ("DONE" . (:weight bold :strike-through t))
-                 ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
-                 ))
+    (setq org-tag-alist '(("next" . ?n)
+                          ("soon" . ?s)
+                          ("later" . ?l)))
 
-         (setq org-tag-alist '(("next" . ?n)
-                               ("soon" . ?s)
-                               ("later" . ?l)))
+    ;; hide the slash(/abc/), asterisks(*abc*) characters for emphasized text
+    ;; (setq org-hide-emphasis-markers t)
+    (setq org-hide-emphasis-markers nil)
 
-         ;; hide the slash(/abc/), asterisks(*abc*) characters for emphasized text
-         ;; (setq org-hide-emphasis-markers t)
-         (setq org-hide-emphasis-markers nil)
+                                        ;change what face is used to display bold (or any other) markup by adding a new entry to org-emphasis-alist
+    ;; Here is a list of common font properties:
+    ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html
+    ;; 'slant'
+    ;;   One of 'italic', 'oblique', or 'roman'.
+    ;; 'weight'
+    ;;   One of 'light', 'medium', 'demibold', 'bold' or 'black'.
+    ;; 'style'
+    ;;    Some fonts define special styles which are a combination of slant and weight. For instance, 'Dejavu Sans' defines the 'book' style, which overrides the slant and weight properties.
+    ;; 'width'
+    ;;     One of 'condensed', 'normal', or 'expanded'.
+    ;; 'spacing'
+    ;;      One of 'monospace', 'proportional', 'dual-width', or 'charcell'.
+    ;;
+    ;; colors refer to:
+    ;; https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
+    (add-to-list 'org-emphasis-alist
+                 '("*" (:weight bold :foreground "#d13632")
+                   ))
+    (add-to-list 'org-emphasis-alist
+                 '("/" (:slant italic :foreground "#1d829e")
+                   ))
+    (add-to-list 'org-emphasis-alist
+                 '("_" (:slant oblique :foreground "#96bf33")
+                   ))
 
-         ;change what face is used to display bold (or any other) markup by adding a new entry to org-emphasis-alist
-         ;; Here is a list of common font properties:
-         ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html
-         ;; 'slant'
-         ;;   One of 'italic', 'oblique', or 'roman'.
-         ;; 'weight'
-         ;;   One of 'light', 'medium', 'demibold', 'bold' or 'black'.
-         ;; 'style'
-         ;;    Some fonts define special styles which are a combination of slant and weight. For instance, 'Dejavu Sans' defines the 'book' style, which overrides the slant and weight properties.
-         ;; 'width'
-         ;;     One of 'condensed', 'normal', or 'expanded'.
-         ;; 'spacing'
-         ;;      One of 'monospace', 'proportional', 'dual-width', or 'charcell'.
-         ;;
-         ;; colors refer to:
-         ;; https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
-         (add-to-list 'org-emphasis-alist
-                      '("*" (:weight bold :foreground "#d13632")
-                        ))
-         (add-to-list 'org-emphasis-alist
-                      '("/" (:slant italic :foreground "#1d829e")
-                        ))
-         (add-to-list 'org-emphasis-alist
-                      '("_" (:slant oblique :foreground "#96bf33")
-                        ))
+    ;; (require 'ob-python)
+    ;; active Org-babel languages
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '(;; other Babel languages
+       (plantuml . t)
+       ;; (yaml . t)
+       ;; (json . t)
+       (R . t)
+       (python . t)
+       ))
 
-         ;; (require 'ob-python)
-         ;; ;; active Org-babel languages
-         ;; (org-babel-do-load-languages
-         ;;  'org-babel-load-languages
-         ;;  '(;; other Babel languages
-         ;;    (plantuml . t)
-         ;;    ;; (yaml . t)
-         ;;    ;; (json . t)
-         ;;    (R . t)
-         ;;    (python . t)
-         ;;    ))
-
-         ;; (require 'ob-plantuml)
-         (setq org-plantuml-jar-path
-                (expand-file-name "~/Dropbox/Textnotes/tools/plantuml.jar"))
-
-
-         ;; Use minted
-         (require 'org)
-         (require 'ox-latex)
-         ;; (add-to-list 'org-latex-packages-alist '("" "minted"))
-         ;; (add-to-list 'org-latex-packages-alist '("" "listingsutf8"))
-
-         (setq org-latex-listings 'minted
-               org-latex-packages-alist '(("" "minted"))
-               org-latex-pdf-process
-               '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-                 "bibtex %b"
-                 "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-                 "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+    ;; (require 'ob-plantuml)
+    (setq org-plantuml-jar-path
+          (expand-file-name "~/Dropbox/Textnotes/tools/plantuml.jar"))
 
 
-         ;; (setq org-src-fontify-natively t)
-         ;; ;; Sample minted options.
-         ;; (setq org-latex-minted-options '(
-         ;;                                  ("frame" "lines")
-         ;;                                  ("fontsize" "\\scriptsize")
-         ;;                                  ("xleftmargin" "\\parindent")
-         ;;                                  ("linenos" "")
-         ;;                                  ))
+    ;; Use minted
+    ;; (require 'org)
+    (require 'ox-latex)
+    ;; (add-to-list 'org-latex-packages-alist '("" "minted"))
+    ;; (add-to-list 'org-latex-packages-alist '("" "listingsutf8"))
+
+    (setq org-latex-listings 'minted
+          org-latex-packages-alist '(("" "minted"))
+          org-latex-pdf-process
+          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "bibtex %b"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+
+    ;; (setq org-src-fontify-natively t)
+    ;; ;; Sample minted options.
+    ;; (setq org-latex-minted-options '(
+    ;;                                  ("frame" "lines")
+    ;;                                  ("fontsize" "\\scriptsize")
+    ;;                                  ("xleftmargin" "\\parindent")
+    ;;                                  ("linenos" "")
+    ;;                                  ))
 
 
 
+    )
+
+  ;;for org-ref;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (require 'org-ref)
+  ;; bibtex
+  ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/library.bib"))
+
+  (setq org-ref-default-bibliography '("~/Dropbox/bibliography/library.bib")
+        org-ref-pdf-directory "~/Dropbox/bibliography/pdfs/"
+        org-ref-bibliography-notes "~/Dropbox/bibliography/biblio-notes.org"
+        ;; org-ref-notes-directory "~/Dropbox/Textnotes/papernotes"
         )
 
-       ;;for org-ref;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; If you use helm-bibtex as the citation key completion method you should set these variables too.
 
-       (require 'org-ref)
-       ;; bibtex
-       ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/library.bib"))
+  ;; (setq bibtex-completion-bibliography '("~/Dropbox/bibliography/library.bib")
+  (setq bibtex-completion-bibliography org-ref-default-bibliography
+        ;;       bibtex-completion-library-path '("~/Dropbox/bibliography/pdfs", "~/Dropbox/Articles")
+        ;; bibtex-completion-notes-path "~/Dropbox/bibliography/bibtex-notes.org"
+        )
 
-       (setq org-ref-default-bibliography '("~/Dropbox/bibliography/library.bib")
-             org-ref-pdf-directory "~/Dropbox/bibliography/pdfs/"
-             org-ref-bibliography-notes "~/Dropbox/bibliography/biblio-notes.org"
-             ;; org-ref-notes-directory "~/Dropbox/Textnotes/papernotes"
-             )
+  ;; open pdf with system pdf viewer (works on mac)
+  (setq bibtex-completion-pdf-open-function
+        (lambda (fpath)
+          (start-process "open" "*open*" "open" fpath)))
 
-       ;If you use helm-bibtex as the citation key completion method you should set these variables too.
+  ;; ;org-ref links are designed to export to the corresponding LaTeX
+  ;; (setq org-latex-pdf-process
+  ;;       '("pdflatex -interaction nonstopmode -output-directory %o %f"
+  ;;         "bibtex %b"
+  ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"
+  ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"))
 
-       ;; (setq bibtex-completion-bibliography '("~/Dropbox/bibliography/library.bib")
-       (setq bibtex-completion-bibliography org-ref-default-bibliography
-       ;;       bibtex-completion-library-path '("~/Dropbox/bibliography/pdfs", "~/Dropbox/Articles")
-             ;; bibtex-completion-notes-path "~/Dropbox/bibliography/bibtex-notes.org"
-             )
-
-       ;; open pdf with system pdf viewer (works on mac)
-       (setq bibtex-completion-pdf-open-function
-             (lambda (fpath)
-               (start-process "open" "*open*" "open" fpath)))
-
-       ;; ;org-ref links are designed to export to the corresponding LaTeX
-       ;; (setq org-latex-pdf-process
-       ;;       '("pdflatex -interaction nonstopmode -output-directory %o %f"
-	     ;;         "bibtex %b"
-	     ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"
-	     ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"))
-
-       ;; (setq reftex-external-file-finders
-       ;;       '(("tex" . "~/Dropbox/bibliography -format=.tex %f")
-       ;;         ("bib" . "~/Dropbox/bibliography -format=.bib %f")))
+  ;; (setq reftex-external-file-finders
+  ;;       '(("tex" . "~/Dropbox/bibliography -format=.tex %f")
+  ;;         ("bib" . "~/Dropbox/bibliography -format=.bib %f")))
        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-       (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
-       (add-hook 'text-mode-hook 'visual-line-mode)
-       (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
+  (add-hook 'text-mode-hook 'visual-line-mode)
+  (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
-       ;; ;; hook for set font face to pitch mode (non-monospace font) for text file. See custom-set-faces
-       ;; (defun set-buffer-variable-pitch ()
-       ;;   (interactive)
-       ;;   (variable-pitch-mode t)
-       ;;   (setq line-spacing 3)
-       ;;   (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-       ;;   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
-       ;;   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-       ;;   (set-face-attribute 'org-block-background nil :inherit 'fixed-pitch)
-       ;;   )
+  ;; ;; hook for set font face to pitch mode (non-monospace font) for text file. See custom-set-faces
+  ;; (defun set-buffer-variable-pitch ()
+  ;;   (interactive)
+  ;;   (variable-pitch-mode t)
+  ;;   (setq line-spacing 3)
+  ;;   (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  ;;   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+  ;;   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  ;;   (set-face-attribute 'org-block-background nil :inherit 'fixed-pitch)
+  ;;   )
 
-       ;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
-       ;; (add-hook 'eww-mode-hook 'set-buffer-variable-pitch)
-       ;; (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
-       ;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
+  ;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
+  ;; (add-hook 'eww-mode-hook 'set-buffer-variable-pitch)
+  ;; (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
+  ;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
 
-       ;; to skip spell check for certain regions
-       (defun endless/org-ispell ()
-         ;; "Configure `ispell-skip-region-alist' for `org-mode'."
-         (make-local-variable 'ispell-skip-region-alist)
-         (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
-         (add-to-list 'ispell-skip-region-alist '("~" "~"))
-         (add-to-list 'ispell-skip-region-alist '("=" "="))
-         (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
-       (add-hook 'org-mode-hook #'endless/org-ispell)
+  ;; to skip spell check for certain regions
+  (defun endless/org-ispell ()
+    ;; "Configure `ispell-skip-region-alist' for `org-mode'."
+    (make-local-variable 'ispell-skip-region-alist)
+    (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+    (add-to-list 'ispell-skip-region-alist '("~" "~"))
+    (add-to-list 'ispell-skip-region-alist '("=" "="))
+    (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+  (add-hook 'org-mode-hook #'endless/org-ispell)
 
-       ;; locale for shell
-       (exec-path-from-shell-copy-env "LC_ALL")
-       (exec-path-from-shell-copy-env "LANG")
-
-
-
-       (require 'vue-mode)
-       ;; vue mode
-       (defun dotspacemacs/init-vue-mode ()
-         (use-package vue-mode))
+  ;; locale for shell
+  (exec-path-from-shell-copy-env "LC_ALL")
+  (exec-path-from-shell-copy-env "LANG")
 
 
 
-       ;; may delete after update, to map meta-return
-       (org-defkey org-mode-map [(meta return)] 'org-meta-return)
+  (require 'vue-mode)
+  ;; vue mode
+  (defun dotspacemacs/init-vue-mode ()
+    (use-package vue-mode))
+
+
+
+  ;; may delete after update, to map meta-return
+  (org-defkey org-mode-map [(meta return)] 'org-meta-return)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -789,7 +814,7 @@ you should place your code here."
     ("~/Dropbox/BTH/Statistical Methods/Assignment 1+2/report review.org" "~/Dropbox/BTH/BachelorThesisCourse/Review-Thesis/reviews-201706.org" "~/gowork/src/gitlab.com/ddxgz/linkedinfo/README.org" "~/Dropbox/BTH/Fuzzy Logic/Proposal/notes.org" "~/Dropbox/Textnotes/PhD/unread-papers.org" "~/Dropbox/Orgzly/tasks.org")))
  '(package-selected-packages
    (quote
-    (org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
