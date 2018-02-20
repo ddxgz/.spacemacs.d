@@ -76,7 +76,9 @@ values."
           ;; export github flavored markdown
           org-enable-github-support t
           ;; export Twitter Boostrap
-          org-enable-bootstrap-support t)
+          org-enable-bootstrap-support t
+          ;; reveal.js 
+          org-enable-reveal-js-support t)
 
      (shell :variables
             shell-default-height 30
@@ -95,7 +97,7 @@ values."
                                       ox-gfm
                                       ox-twbs
                                       ;; beacon
-                                      ;; monokai-theme
+                                      monokai-theme
                                       ;;interleave
                                       yasnippet-snippets
                                       (vue-mode :location (recipe
@@ -404,7 +406,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;;           (lambda ()
   ;;             (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex --synctex=1%(mode)%' %t" TeX-run-TeX nil t))))
 
-
   )
 
 (defun dotspacemacs/user-config ()
@@ -416,6 +417,12 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   ;; ;; By pcx ;; ;;
+
+  ;; for Chinese character 等宽: Source Code Pro 13 + STkaiti 16
+  (setq face-font-rescale-alist `(("STKaiti" . ,(/ 16.0 13))))
+  (set-fontset-font t 'han      (font-spec :family "STKaiti"))
+  (set-fontset-font t 'cjk-misc (font-spec :family "STKaiti"))
+
 
   ;; ;; my keybindings
   ;; In smartparens-mode, the function sp-up-sexp will move you out of a set of parentheses (bind to your key of choice)
@@ -568,6 +575,7 @@ you should place your code here."
 
     (setq org-image-actual-width nil)
 
+
     ;; org-download screenshot method
     (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s")
     ;; (setq org-download-screenshot-method "screencapture")
@@ -636,10 +644,12 @@ you should place your code here."
             ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
             ))
 
-    (setq org-tag-alist '(("next" . ?n)
-                          ("soon" . ?s)
-                          ("later" . ?l)))
+    (setq org-tag-alist '((("next" . ?n) ("soon" . ?s) ("later" . ?l))
+                          ("reviewpaper" . ?r)
+                          (("work" . ?w) ("personal" . ?p))
+                          ))
 
+    ;;;;;;;;;;;;;;;;;; text face ;;;;;;;;;;;;;;;;;;;;;
     ;; hide the slash(/abc/), asterisks(*abc*) characters for emphasized text
     ;; (setq org-hide-emphasis-markers t)
     (setq org-hide-emphasis-markers nil)
@@ -727,7 +737,7 @@ you should place your code here."
             "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
     )
 
-  ;;for org-ref;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;; for org-ref ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; (require 'org-ref)
   (use-package org-ref
     :defer t
@@ -770,7 +780,8 @@ you should place your code here."
 
   (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
-  (add-hook 'text-mode-hook 'visual-line-mode)
+  ;; (add-hook 'text-mode-hook 'visual-line-mode)
+  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
   (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
   ;; ;; hook for set font face to pitch mode (non-monospace font) for text file. See custom-set-faces
@@ -826,14 +837,14 @@ you should place your code here."
  '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
    (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("d3a406c5905923546d8a3ad0164a266deaf451856eca5f21b36594ffcb08413a" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
    (quote
     ("~/Dropbox/Orgzly/tasks.org" "~/Dropbox/Textnotes/PhD/research process.org" "~/Dropbox/Textnotes/PhD/paper ideas.org")))
  '(package-selected-packages
    (quote
-    (ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
