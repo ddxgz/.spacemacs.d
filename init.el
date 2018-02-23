@@ -657,7 +657,7 @@ before packages are loaded."
   ;; (setq org-fontify-whole-heading-line t)
   ;; (with-eval-after-load 'org
   (use-package org
-    :defer t
+    ;; :defer t
     :config
     ;; turn on golden-ratio window resizing
     ;; see: https://github.com/roman/golden-ratio.el
@@ -674,7 +674,6 @@ before packages are loaded."
     (setq org-export-with-smart-quotes t)
 
     (setq org-image-actual-width nil)
-
 
     ;; org-download screenshot method
     (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s")
@@ -744,9 +743,13 @@ before packages are loaded."
             ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
             ))
 
-    (setq org-tag-alist '((("next" . ?n) ("soon" . ?s) ("later" . ?l))
+    (setq org-tag-alist '((:startgroup . nil)
+                          ("next" . ?n) ("soon" . ?s) ("later" . ?l)
+                          (:endgroup . nil)
                           ("reviewpaper" . ?r)
-                          (("work" . ?w) ("personal" . ?p))
+                          (:startgroup . nil)
+                          ("work" . ?w) ("personal" . ?p)
+                          (:endgroup . nil)
                           ))
 
     ;;;;;;;;;;;;;;;;;; text face ;;;;;;;;;;;;;;;;;;;;;
