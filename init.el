@@ -52,6 +52,7 @@ values."
      ;; python
      (python :variables
              python-backend 'lsp
+             ;; python-backend 'anaconda
              python-fill-column 80
              python-sort-imports-on-save nil)
 
@@ -84,7 +85,7 @@ values."
           org-enable-reveal-js-support t)
 
      (shell :variables
-            shell-default-height 30
+            shell-default-height 20
             shell-default-position 'bottom)
      spell-checking
      syntax-checking
@@ -96,6 +97,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
                                       ;;by pcx;;
+                                      ;; beamer
                                       cdlatex
                                       ox-gfm
                                       ox-twbs
@@ -488,7 +490,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;; start. (default nil)
    ;; Note: By default, Spacemacs will automatically save the layouts under the name persp-auto-save.
    ;; Setting the variable dotspacemacs-auto-resume-layouts to t will automatically resume the last saved layouts.
-   ;; dotspacemacs-auto-resume-layouts t
+   dotspacemacs-auto-resume-layouts t
    )
 
   ;; latex
@@ -585,24 +587,27 @@ before packages are loaded."
   ;; (setq recentf-sava-file (format "/tmp/recentf.%s" (emacs-pid)))
 
 
-  (with-eval-after-load 'helm
-    (setq helm-display-function 'helm-default-display-buffer))
+  ;; (with-eval-after-load 'helm
+  ;;   (setq helm-display-function 'helm-default-display-buffer))
 
   ;; for set flycheck to only check when save
-  (with-eval-after-load 'flycheck
-    (setq flycheck-check-syntax-automatically '(save mode-enabled)))
+  ;; (with-eval-after-load 'flycheck
+  (use-package flycheck
+    :config
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    )
 
   ;; ;; (flyspell nil)
   ;; (setq flyspell-issue-message-flag nil)
 
 
-  (use-package magit
-    :defer t)
+  ;; (use-package magit
+  ;;   :defer t)
 
-  (use-package sass-mode
-    :defer t)
-  (use-package julia-mode
-    :defer t)
+  ;; (use-package sass-mode
+  ;;   :defer t)
+  ;; (use-package julia-mode
+  ;;   :defer t)
 
   ;; ;; for layers ;; ;;
   ;; ;; for enable web-mode in default fot .tmpl
@@ -619,38 +624,39 @@ before packages are loaded."
     )
 
   ;; (with-eval-after-load 'python
-  (use-package python
-    :config
-    (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
-    ;; ;; (setq python-shell-interpreter "python2")
-    ;; (require 'python)
-    ;; ;; (add-to-list 'python-shell-extra-pythonpaths "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7")
-    ;; ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python2.7/site-packages")
-    ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
+  ;; (use-package python
+  ;;   :config
+  ;;   (setq py-smart-indentation t)
+  ;;   ;; try to automagically figure out indentation
 
-    ;; (use-package python
-    ;;   :defer t
-    ;;   :config
-    ;;   (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
-    ;;   )
+  ;;   (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
 
-    ;; use IPython
-    (setq-default py-shell-name "ipython")
-    (setq-default py-which-bufname "IPython")
-    ;; use the wx backend, for both mayavi and matplotlib
-    (setq py-python-command-args
-          '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
-    (setq py-force-py-shell-name-p t)
+  ;;   ;; (setq python-shell-interpreter "python3")
+  ;;   ;; (require 'python)
+  ;;   ;; ;; (add-to-list 'python-shell-extra-pythonpaths "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7")
+  ;;   ;; ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python2.7/site-packages")
+  ;;   ;; (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
 
-    ;; switch to the interpreter after executing code
-    (setq py-shell-switch-buffers-on-execute-p t)
-    (setq py-switch-buffers-on-execute-p t)
-    ;; don't split windows
-    (setq py-split-windows-on-execute-p nil)
-    ;; try to automagically figure out indentation
-    (setq py-smart-indentation t)
+  ;;   ;; (use-package python
+  ;;   ;;   :defer t
+  ;;   ;;   :config
+  ;;   ;;   (add-to-list 'python-shell-extra-pythonpaths "/usr/local/lib/python3.6/site-packages")
+  ;;   ;;   )
 
-    )
+  ;;   ;; ;; use IPython
+  ;;   (setq-default py-shell-name "ipython")
+  ;;   ;; (setq-default py-which-bufname "IPython")
+  ;;   ;; use the wx backend, for both mayavi and matplotlib
+  ;;   (setq py-python-command-args
+  ;;         '("--gui=wx" "--pylab=wx" "-colors" "Linux"))
+  ;;   (setq py-force-py-shell-name-p t)
+
+  ;;   ;; ;; switch to the interpreter after executing code
+  ;;   ;; (setq py-shell-switch-buffers-on-execute-p t)
+  ;;   ;; (setq py-switch-buffers-on-execute-p t)
+  ;;   ;; ;; don't split windows
+  ;;   ;; (setq py-split-windows-on-execute-p nil)
+  ;;   )
 
   ;; ;; for org ;; ;;
   ;; ;; Fontify the whole line for headings (with a background color).
@@ -668,8 +674,8 @@ before packages are loaded."
     ;; (add-hook 'text-mode-hook 'visual-line-mode)
     ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
-    ;; may delete after update, to map meta-return
-    (org-defkey org-mode-map [(meta return)] 'org-meta-return)
+    ;; ;; may delete after update, to map meta-return
+    ;; (org-defkey org-mode-map [(meta return)] 'org-meta-return)
 
     (setq org-export-with-smart-quotes t)
 
@@ -728,20 +734,20 @@ before packages are loaded."
     ;;    ((((class color) (min-colors 16) (background dark))
     ;;      (:foreground "LightSalmon" :strike-through t)))))
 
-    ;; colors in spacemacs https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
-    (setq org-todo-keyword-faces
-          '(
-            ;; ("TODO" . "orange")
-            ("STARTED" . "yellow")
-            ("MINOR" . "yellow")
-            ("HALF" . "yellow")
-            ("USEFUL" . "red")
-            ("WAIT" . "grey")
-            ("CANCELED" . (:foreground "blue" :weight bold :strike-through t))
-            ;; ("DONE" . (:background "gren-bg" :weight bold :strike-through t))
-            ("DONE" . (:weight bold :strike-through t))
-            ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
-            ))
+    ;; ;; colors in spacemacs https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
+    ;; (setq org-todo-keyword-faces
+    ;;       '(
+    ;;         ;; ("TODO" . "orange")
+    ;;         ("STARTED" . "yellow")
+    ;;         ("MINOR" . "yellow")
+    ;;         ("HALF" . "yellow")
+    ;;         ("USEFUL" . "red")
+    ;;         ("WAIT" . "grey")
+    ;;         ("CANCELED" . (:foreground "blue" :weight bold :strike-through t))
+    ;;         ;; ("DONE" . (:background "gren-bg" :weight bold :strike-through t))
+    ;;         ("DONE" . (:weight bold :strike-through t))
+    ;;         ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
+    ;;         ))
 
     (setq org-tag-alist '((:startgroup . nil)
                           ("next" . ?n) ("soon" . ?s) ("later" . ?l)
@@ -755,7 +761,7 @@ before packages are loaded."
     ;;;;;;;;;;;;;;;;;; text face ;;;;;;;;;;;;;;;;;;;;;
     ;; hide the slash(/abc/), asterisks(*abc*) characters for emphasized text
     ;; (setq org-hide-emphasis-markers t)
-    (setq org-hide-emphasis-markers nil)
+    ;; (setq org-hide-emphasis-markers nil)
 
     ;; change what face is used to display bold (or any other) markup by adding a new entry to org-emphasis-alist
     ;; refer to Font section in Documentation:
@@ -919,11 +925,13 @@ before packages are loaded."
 
 
 
-  (require 'vue-mode)
-  ;; vue mode
-  (defun dotspacemacs/init-vue-mode ()
-    (use-package vue-mode))
-
+  ;; (require 'vue-mode)
+  ;; ;; vue mode
+  ;; (defun dotspacemacs/init-vue-mode ()
+  ;;   (use-package vue-mode))
+  (use-package vue-mode
+    :defer t
+    )
 
 
   )
@@ -973,10 +981,10 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
    (quote
-    ("~/Dropbox/Textnotes/paper-SemREST-Health/draft.org" "~/Dropbox/Orgzly/tasks.org" "~/Dropbox/Textnotes/PhD/research process.org" "~/Dropbox/Textnotes/PhD/paper ideas.org")))
+    ("~/Dropbox/Orgzly/tasks.org" "~/Dropbox/Textnotes/PhD/research process.org" "~/Dropbox/Textnotes/PhD/paper ideas.org")))
  '(package-selected-packages
    (quote
-    (ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (lsp-mode ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
