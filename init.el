@@ -118,12 +118,13 @@ values."
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(
                                     ;; org-projectile
-                                    ;; anaconda-mode
+                                    anaconda-mode
                                     ess-R-object-popup
                                     ;;
                                     org-timer
                                     saas-mode
                                     julia-mode
+                                    fancy-battery
                                     )
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -499,7 +500,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;; start. (default nil)
    ;; Note: By default, Spacemacs will automatically save the layouts under the name persp-auto-save.
    ;; Setting the variable dotspacemacs-auto-resume-layouts to t will automatically resume the last saved layouts.
-   ;; dotspacemacs-auto-resume-layouts t
+   dotspacemacs-auto-resume-layouts t
    )
 
   ;; latex
@@ -617,6 +618,22 @@ before packages are loaded."
   ;;   :defer t)
   ;; (use-package julia-mode
   ;;   :defer t)
+
+  ;; get system shell's env to emacs
+  (use-package exec-path-from-shell
+    :ensure t
+    :init (progn
+            (when(not(eq system-type 'windows-nt))
+              (setq exec-path-from-shell-variables '("GOPATH"))
+              ;; when it is nil, exec-path-from-shell will read environment variable
+              ;; from .zshenv instead of .zshrc, but makes sure that you put all
+              ;; environment variable you need in .zshenv rather than .zshrc
+              (setq exec-path-from-shell-check-startup-files nil) ;
+              (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
+              (exec-path-from-shell-initialize)
+              )
+            )
+    )
 
   ;; ;; for layers ;; ;;
   ;; ;; for enable web-mode in default fot .tmpl
@@ -858,7 +875,7 @@ before packages are loaded."
     )
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;; for org-ref ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (require 'org-ref)
+  ;; (require 'org-ref)
   (use-package org-ref
     :defer t
     :config
@@ -1000,8 +1017,7 @@ This function is called at the very end of Spacemacs initialization."
     ("~/Dropbox/Orgzly/tasks.org" "~/Dropbox/Textnotes/PhD/research process.org" "~/Dropbox/Textnotes/PhD/paper ideas.org")))
  '(package-selected-packages
    (quote
-    (wgrep smex ivy-xref ivy-purpose ivy-hydra flyspell-correct-ivy counsel-css ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
- '(safe-local-variable-values (quote ((eval progn (pp-buffer) (indent-buffer))))))
+    (lsp-ui lsp-mode ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
