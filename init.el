@@ -499,7 +499,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;; start. (default nil)
    ;; Note: By default, Spacemacs will automatically save the layouts under the name persp-auto-save.
    ;; Setting the variable dotspacemacs-auto-resume-layouts to t will automatically resume the last saved layouts.
-   dotspacemacs-auto-resume-layouts t
+   ;; dotspacemacs-auto-resume-layouts t
    )
 
   ;; latex
@@ -818,7 +818,8 @@ before packages are loaded."
     :defer t
     :config
     (setq org-plantuml-jar-path
-          (expand-file-name "~/Dropbox/Textnotes/tools/plantuml.jar"))
+          ;; (expand-file-name "~/Dropbox/Textnotes/tools/plantuml.jar"))
+          (expand-file-name "~/.spacemacs.d/plantuml.jar"))
     )
 
   ;; ;; (require 'ob-python)
@@ -857,7 +858,7 @@ before packages are loaded."
     )
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;; for org-ref ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; (require 'org-ref)
+  (require 'org-ref)
   (use-package org-ref
     :defer t
     :config
