@@ -30,7 +30,7 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(rust
      csv
      ;; restclient
 
@@ -38,7 +38,7 @@ values."
      nginx
      yaml
      osx
-     go
+     (go :variables go-tab-width 4)
      ess
      ;; csv
      html
@@ -103,6 +103,7 @@ values."
                                       cdlatex
                                       ox-gfm
                                       ox-twbs
+                                      ox-hugo
                                       ;; beacon
                                       monokai-theme
                                       ;;interleave
@@ -830,126 +831,130 @@ before packages are loaded."
       ;;                                  ))
 
 
-  ;; (require 'ob-plantuml)
-  (use-package ob-plantuml
-    :defer t
-    :config
-    (setq org-plantuml-jar-path
-          ;; (expand-file-name "~/Dropbox/Textnotes/tools/plantuml.jar"))
-          (expand-file-name "~/.spacemacs.d/plantuml.jar"))
-    )
+      ;; (require 'ob-plantuml)
+      (use-package ob-plantuml
+        :defer t
+        :config
+        (setq org-plantuml-jar-path
+              ;; (expand-file-name "~/Dropbox/Textnotes/tools/plantuml.jar"))
+              (expand-file-name "~/.spacemacs.d/plantuml.jar"))
+        )
 
-  ;; ;; (require 'ob-python)
-  ;; ;; active Org-babel languages
-  (use-package ob-python
-    :defer t
-    :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '(;; other Babel languages
-       (plantuml . t)
-       ;; (yaml . t)
-       ;; (json . t)
-       (R . t)
-       (python . t)
-       ))
-    )
+      ;; ;; (require 'ob-python)
+      ;; ;; active Org-babel languages
+      (use-package ob-python
+        :defer t
+        :config
+        (org-babel-do-load-languages
+         'org-babel-load-languages
+         '(;; other Babel languages
+           (plantuml . t)
+           ;; (yaml . t)
+           ;; (json . t)
+           (R . t)
+           (python . t)
+           ))
+        )
 
+      ;; ox-hugo config
+      (use-package ox-hugo
+        :ensure t                           ;Auto-install the package from Melpa
+        :after ox)
 
-  ;; Use minted
-  ;; (require 'org)
-  ;; (require 'ox-latex)
-  (use-package ox-latex
-    :defer t
-    :config
-    ;; (add-to-list 'org-latex-packages-alist '("" "minted"))
-    ;; (add-to-list 'org-latex-packages-alist '("" "listingsutf8"))
+      ;; Use minted
+      ;; (require 'org)
+      ;; (require 'ox-latex)
+      (use-package ox-latex
+        :defer t
+        :config
+        ;; (add-to-list 'org-latex-packages-alist '("" "minted"))
+        ;; (add-to-list 'org-latex-packages-alist '("" "listingsutf8"))
 
-    (setq org-latex-listings 'minted
-          org-latex-packages-alist '(("" "minted"))
-          org-latex-pdf-process
-          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-            "bibtex %b"
-            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-    )
+        (setq org-latex-listings 'minted
+              org-latex-packages-alist '(("" "minted"))
+              org-latex-pdf-process
+              '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+                "bibtex %b"
+                "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+                "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+        )
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;; for org-ref ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; (require 'org-ref)
-  (use-package org-ref
-    :defer t
-    :config
-    ;; bibtex
-    ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/library.bib"))
+      ;; (require 'org-ref)
+      (use-package org-ref
+        :defer t
+        :config
+        ;; bibtex
+        ;; (setq reftex-default-bibliography '("~/Dropbox/bibliography/library.bib"))
 
-    (progn
-      (setq org-ref-default-bibliography '("~/Dropbox/bibliography/library.bib")
-            org-ref-pdf-directory "~/Dropbox/bibliography/pdfs/"
-            org-ref-bibliography-notes "~/Dropbox/bibliography/biblio-notes.org"
-            ;; org-ref-notes-directory "~/Dropbox/Textnotes/papernotes"
-            )
+        (progn
+          (setq org-ref-default-bibliography '("~/Dropbox/bibliography/library.bib")
+                org-ref-pdf-directory "~/Dropbox/bibliography/pdfs/"
+                org-ref-bibliography-notes "~/Dropbox/bibliography/biblio-notes.org"
+                ;; org-ref-notes-directory "~/Dropbox/Textnotes/papernotes"
+                )
 
-      ;; If you use helm-bibtex as the citation key completion method you should set these variables too.
+          ;; If you use helm-bibtex as the citation key completion method you should set these variables too.
 
-      ;; (setq bibtex-completion-bibliography '("~/Dropbox/bibliography/library.bib")
-      (setq bibtex-completion-bibliography org-ref-default-bibliography
-            ;;       bibtex-completion-library-path '("~/Dropbox/bibliography/pdfs", "~/Dropbox/Articles")
-            ;; bibtex-completion-notes-path "~/Dropbox/bibliography/bibtex-notes.org"
-            )
+          ;; (setq bibtex-completion-bibliography '("~/Dropbox/bibliography/library.bib")
+          (setq bibtex-completion-bibliography org-ref-default-bibliography
+                ;;       bibtex-completion-library-path '("~/Dropbox/bibliography/pdfs", "~/Dropbox/Articles")
+                ;; bibtex-completion-notes-path "~/Dropbox/bibliography/bibtex-notes.org"
+                )
 
-      ;; open pdf with system pdf viewer (works on mac)
-      (setq bibtex-completion-pdf-open-function
-            (lambda (fpath)
-              (start-process "open" "*open*" "open" fpath)))
+          ;; open pdf with system pdf viewer (works on mac)
+          (setq bibtex-completion-pdf-open-function
+                (lambda (fpath)
+                  (start-process "open" "*open*" "open" fpath)))
 
-      ;; ;org-ref links are designed to export to the corresponding LaTeX
-      ;; (setq org-latex-pdf-process
-      ;;       '("pdflatex -interaction nonstopmode -output-directory %o %f"
-      ;;         "bibtex %b"
-      ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"
-      ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"))
+          ;; ;org-ref links are designed to export to the corresponding LaTeX
+          ;; (setq org-latex-pdf-process
+          ;;       '("pdflatex -interaction nonstopmode -output-directory %o %f"
+          ;;         "bibtex %b"
+          ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"
+          ;;         "pdflatex -interaction nonstopmode -output-directory %o %f"))
 
-      ;; (setq reftex-external-file-finders
-      ;;       '(("tex" . "~/Dropbox/bibliography -format=.tex %f")
-      ;;         ("bib" . "~/Dropbox/bibliography -format=.bib %f")))
+          ;; (setq reftex-external-file-finders
+          ;;       '(("tex" . "~/Dropbox/bibliography -format=.tex %f")
+          ;;         ("bib" . "~/Dropbox/bibliography -format=.bib %f")))
        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+          )
+        )
+
+
+      (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
+      ;; (add-hook 'text-mode-hook 'visual-line-mode)
+      (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+      (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
+
+      ;; ;; hook for set font face to pitch mode (non-monospace font) for text file. See custom-set-faces
+      ;; (defun set-buffer-variable-pitch ()
+      ;;   (interactive)
+      ;;   (variable-pitch-mode t)
+      ;;   (setq line-spacing 3)
+      ;;   (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+      ;;   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+      ;;   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+      ;;   (set-face-attribute 'org-block-background nil :inherit 'fixed-pitch)
+      ;;   )
+
+      ;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
+      ;; (add-hook 'eww-mode-hook 'set-buffer-variable-pitch)
+      ;; (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
+      ;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
+
+      ;; to skip spell check for certain regions
+      (defun endless/org-ispell ()
+        ;; "Configure `ispell-skip-region-alist' for `org-mode'."
+        (make-local-variable 'ispell-skip-region-alist)
+        (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+        (add-to-list 'ispell-skip-region-alist '("~" "~"))
+        (add-to-list 'ispell-skip-region-alist '("=" "="))
+        (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+      (add-hook 'org-mode-hook #'endless/org-ispell)
+
       )
-    )
-
-
-  (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
-
-  ;; (add-hook 'text-mode-hook 'visual-line-mode)
-  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
-  (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
-
-  ;; ;; hook for set font face to pitch mode (non-monospace font) for text file. See custom-set-faces
-  ;; (defun set-buffer-variable-pitch ()
-  ;;   (interactive)
-  ;;   (variable-pitch-mode t)
-  ;;   (setq line-spacing 3)
-  ;;   (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-  ;;   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
-  ;;   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  ;;   (set-face-attribute 'org-block-background nil :inherit 'fixed-pitch)
-  ;;   )
-
-  ;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
-  ;; (add-hook 'eww-mode-hook 'set-buffer-variable-pitch)
-  ;; (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
-  ;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
-
-  ;; to skip spell check for certain regions
-  (defun endless/org-ispell ()
-    ;; "Configure `ispell-skip-region-alist' for `org-mode'."
-    (make-local-variable 'ispell-skip-region-alist)
-    (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
-    (add-to-list 'ispell-skip-region-alist '("~" "~"))
-    (add-to-list 'ispell-skip-region-alist '("=" "="))
-    (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
-  (add-hook 'org-mode-hook #'endless/org-ispell)
-
-  )
     )
 
   ;; locale for shell
@@ -1017,7 +1022,7 @@ This function is called at the very end of Spacemacs initialization."
     ("~/Dropbox/Orgzly/tasks.org" "~/Dropbox/Textnotes/PhD/research process.org" "~/Dropbox/Textnotes/PhD/paper ideas.org")))
  '(package-selected-packages
    (quote
-    (lsp-ui lsp-mode ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (toml-mode racer helm-gtags ggtags flycheck-rust cargo rust-mode ox-reveal ac-anaconda org-mime yasnippet-snippets ghub let-alist cdlatex auto-complete-auctex auctex-lua ess-smart-equals ess-R-data-view ctable ess julia-mode plantuml-mode edit-indirect restclient-helm ob-restclient ob-http company-restclient restclient know-your-http-well nginx-mode vue-mode ssass-mode vue-html-mode yaml-mode company-auctex auctex-latexmk auctex org-ref pdf-tools key-chord ivy tablist helm-bibtex parsebib biblio biblio-core yapfify xterm-color web-mode web-beautify tagedit smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder pyvenv pytest pyenv-mode py-isort pug-mode pip-requirements pbcopy ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-download multi-term monokai-theme mmm-mode markdown-toc markdown-mode magit-gitflow livid-mode skewer-mode simple-httpd live-py-mode less-css-mode launchctl json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc hy-mode htmlize helm-pydoc helm-gitignore helm-css-scss helm-company helm-c-yasnippet haml-mode go-guru go-eldoc gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help emmet-mode diff-hl cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-go go-mode company-anaconda company coffee-mode beacon seq auto-yasnippet yasnippet auto-dictionary anaconda-mode pythonic ac-ispell auto-complete ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
