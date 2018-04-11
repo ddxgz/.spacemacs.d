@@ -9,7 +9,7 @@ This function should only modify configuration layer settings."
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
-   dotspacemacs-distribution 'spacemacs
+   dotspacemacs-distribution 'spacemacs-base
 
    ;; Lazy installation of layers (i.e. layers are installed only when a file
    ;; with a supported type is opened). Possible values are `all', `unused'
@@ -33,19 +33,35 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
-     csv
+   '(
+     neotree
+     spacemacs-completion
+     spacemacs-layouts
+     spacemacs-editing
+     spacemacs-editing-visual
+     spacemacs-evil
+     ;; spacemacs-language
+     spacemacs-misc
+     spacemacs-modeline
+     spacemacs-navigation
+     spacemacs-org
+     spacemacs-project
+     ;; spacemacs-purpose
+     spacemacs-visual
+     ;; rust
+     ;; csv
      ;; restclient
 
+     docker
      plantuml
      nginx
      yaml
      osx
      (go :variables go-tab-width 4)
-     ess
+     ;; ess
      ;; csv
-     html
-     javascript
+     ;; html
+     ;; javascript
      bibtex
      ;; latex
      (latex :variables
@@ -76,7 +92,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t)
      ;; better-defaults
      emacs-lisp
-     neotree
+     ;; neotree
      git
      markdown
      ;; org
@@ -111,9 +127,10 @@ This function should only modify configuration layer settings."
                                       cdlatex
                                       ox-gfm
                                       ox-twbs
-                                      ox-hugo
+                                      ;; ox-hugo
                                       ;; beacon
                                       ;; monokai-theme
+                                      doom-themes
                                       ;;interleave
                                       yasnippet-snippets
                                       (vue-mode :location (recipe
@@ -130,7 +147,7 @@ This function should only modify configuration layer settings."
                                     anaconda-mode
                                     ess-R-object-popup
                                     ;;
-                                    org-timer
+                                    ;; org-timer
                                     saas-mode
                                     julia-mode
                                     fancy-battery
@@ -519,6 +536,10 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;; (default nil)
    dotspacemacs-verify-spacelpa-archives t
 
+   dotspacemacs-themes '(doom-one
+                         spacemacs-dark
+                         spacemacs-light)
+
    dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
    ;; dotspacemacs-mode-line-unicode-symbols nil
 
@@ -696,6 +717,8 @@ before packages are loaded."
     :config
     (progn
       (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.gotmpl\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . web-mode))
       ;; auto highlight for pasted code in web-mode
       (setq web-mode-enable-auto-indentation t)
       )
@@ -879,6 +902,70 @@ before packages are loaded."
       ;;                                  ("linenos" "")
       ;;                                  ))
 
+      (setq org-publish-project-alist
+            '(("org-notes"
+               ;; Directory for source files in org format
+               :base-directory "~/Dropbox/Textnotes/Text"
+               :base-extension "org"
+
+               ;; HTML directory
+               :publishing-directory "~/Dropbox/Textnotes/Blog/Notes"
+               ;; :publishing-function org-html-publish-to-html
+               :publishing-function org-twbs-publish-to-html
+               :recursive t
+               ;; :html-preamble t
+               ;; :html-postamble t
+               :auto-sitemap t
+               :sitemap-title "Notes"
+               :sitemap-filename "index.org"
+
+               ;; :html-link-home "./Blog/Notes/index.html"
+               ;; :html-link-up "./Blog/Notes/index.html"
+               )
+              ("stats-notes"
+               ;; Directory for source files in org format
+               :base-directory "~/Dropbox/Textnotes/Statistics"
+               :base-extension "org"
+
+               ;; HTML directory
+               :publishing-directory "~/Dropbox/Textnotes/Blog/stats"
+               ;; :publishing-function org-html-publish-to-html
+               :publishing-function org-twbs-publish-to-html
+               :recursive t
+               ;; :html-preamble t
+               ;; :html-postamble t
+               :auto-sitemap t
+               :sitemap-title "Stats"
+               :sitemap-filename "index.org"
+
+               ;; :html-link-home "./Blog/Notes/index.html"
+               ;; :html-link-up "./Blog/Notes/index.html"
+               )
+              ;; ;; where static files (images, pdfs) are stored
+              ;; ("org-static"
+              ;;  :base-directory "~/org/blog/org/files/"
+              ;;  :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+              ;;  :publishing-directory "~/org/blog/files/"
+              ;;  :recursive t
+              ;;  :publishing-function org-publish-attachment
+              ;;  )
+
+              ;; ("blog" :components ("org-notes" "org-static"))))
+              ("blog" :components ("org-notes" "stats-notes"))))
+
+      (defun auto-publish-blog-hook ()
+        "Auto publish blog on save"
+        ;; check if saved file is part of blog
+        (if (org-publish-get-project-from-filename
+             (buffer-file-name (buffer-base-buffer)) 'up)
+            (save-excursion (org-publish-current-file)
+                            (message "auto published blog") nil)))
+
+      ;; Enable auto-publish when a org file in blog is saved
+      (add-hook 'org-mode-hook
+                (lambda ()
+                  (add-hook 'after-save-hook 'auto-publish-blog-hook nil nil)))
+
 
       ;; (require 'ob-plantuml)
       (use-package ob-plantuml
@@ -905,10 +992,11 @@ before packages are loaded."
            ))
         )
 
-      ;; ox-hugo config
-      (use-package ox-hugo
-        :ensure t                           ;Auto-install the package from Melpa
-        :after ox)
+      ;; ;; ox-hugo config
+      ;; (use-package ox-hugo
+      ;;   :ensure t                           ;Auto-install the package from Melpa
+      ;;   :after ox
+      ;;   )
 
       ;; Use minted
       ;; (require 'org)
@@ -1061,7 +1149,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ox-hugo yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-gitflow macrostep lsp-ui lsp-python lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump diminish cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lsp company-go company-auctex company-anaconda column-enforce-mode coffee-mode clean-aindent-mode centered-cursor-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+    (symon spaceline-all-the-icons spaceline powerline font-lock+ yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toc-org string-inflection smeargle shell-pop reveal-in-osx-finder restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-gitflow macrostep lsp-ui lsp-python lorem-ipsum live-py-mode linum-relative link-hint launchctl indent-guide importmagic hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav editorconfig dumb-jump doom-themes dockerfile-mode docker diminish cython-mode counsel-projectile company-statistics company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
