@@ -33,7 +33,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(html
      neotree
      spacemacs-completion
      spacemacs-layouts
@@ -537,8 +537,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    dotspacemacs-verify-spacelpa-archives t
 
    dotspacemacs-themes '(doom-one
+                         spacemacs-light
                          spacemacs-dark
-                         spacemacs-light)
+                         )
 
    dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
    ;; dotspacemacs-mode-line-unicode-symbols nil
@@ -606,13 +607,23 @@ before packages are loaded."
 
 
   ;; ;; my keybindings
-  ;; In smartparens-mode, the function sp-up-sexp will move you out of a set of parentheses (bind to your key of choice)
+  ;; In smartparens-mode
+  ;;  https://ebzzry.io/en/emacs-pairs/
+  ;; (define-key evil-insert-state-map (kbd "C-;") 'sp-up-sexp)
   (define-key evil-insert-state-map (kbd "C-'") 'sp-up-sexp)
-  ;; sp-beginning-of-sexp
-  ;; sp-end-of-sexp
+  (define-key evil-insert-state-map (kbd "C-[") 'sp-beginning-of-sexp)
+  (define-key evil-insert-state-map (kbd "C-]") 'sp-end-of-sexp)
   ;; sp-down-sexp
   ;; sp-backward-down-sexp
   ;; sp-backward-up-sexp
+
+  ;; (define-key evil-insert-state-map (kbd "C-'") 'end-of-line)
+  (define-key evil-insert-state-map (kbd "C-d") 'evil-delete-char)
+  (define-key evil-insert-state-map (kbd "C-a") 'move-beginning-of-line) ;; was 'evil-paste-last-insertion
+  (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)    ;; was 'evil-copy-from-below
+  (define-key evil-insert-state-map (kbd "C-n") 'next-line)      ;; was 'evil-complete-next
+  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)  ;; was 'evil-complete-previous
+
 
   ;; ;; for vim
   ;; ;; set escape keybinding to "jk"
@@ -694,6 +705,10 @@ before packages are loaded."
   (use-package exec-path-from-shell
     :ensure t
     :init (progn
+            ;; locale for shell
+            (exec-path-from-shell-copy-env "LC_ALL")
+            (exec-path-from-shell-copy-env "LANG")
+
             (when(not(eq system-type 'windows-nt))
               (setq exec-path-from-shell-variables '("GOPATH"))
               ;; when it is nil, exec-path-from-shell will read environment variable
@@ -764,10 +779,6 @@ before packages are loaded."
   ;; (setq org-fontify-whole-heading-line t)
   ;; (with-eval-after-load 'org
 
-  ;; locale for shell
-  (exec-path-from-shell-copy-env "LC_ALL")
-  (exec-path-from-shell-copy-env "LANG")
-
 
 
   ;; (require 'vue-mode)
@@ -777,7 +788,6 @@ before packages are loaded."
   (use-package vue-mode
     :defer t
     )
-
 
   )
 
@@ -793,12 +803,16 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("013c62a1fcee7c8988c831027b1c38ae215f99722911b69e570f21fc19cb662e" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "891debfe489c769383717cc7d0020244a8d62ce6f076b2c42dd1465b7c94204d" "c5d320f0b5b354b2be511882fc90def1d32ac5d38cccc8c68eab60a62d1621f2" default)))
+ '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
    (quote
     ("~/Dropbox/Textnotes/Paper-LinkedHealthServices/notes.org")))
  '(package-selected-packages
    (quote
-    (web-beautify livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc impatient-mode simple-httpd helm-gtags ggtags counsel-gtags company-tern tern coffee-mode add-node-modules-path symon spaceline-all-the-icons spaceline powerline font-lock+ yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toc-org string-inflection smeargle shell-pop reveal-in-osx-finder restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-gitflow macrostep lsp-ui lsp-python lorem-ipsum live-py-mode linum-relative link-hint launchctl indent-guide importmagic hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav editorconfig dumb-jump doom-themes dockerfile-mode docker diminish cython-mode counsel-projectile company-statistics company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+    (web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data web-beautify livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc impatient-mode simple-httpd helm-gtags ggtags counsel-gtags company-tern tern coffee-mode add-node-modules-path symon spaceline-all-the-icons spaceline powerline font-lock+ yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toc-org string-inflection smeargle shell-pop reveal-in-osx-finder restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-gitflow macrostep lsp-ui lsp-python lorem-ipsum live-py-mode linum-relative link-hint launchctl indent-guide importmagic hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy flyspell-correct-helm flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav editorconfig dumb-jump doom-themes dockerfile-mode docker diminish cython-mode counsel-projectile company-statistics company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
