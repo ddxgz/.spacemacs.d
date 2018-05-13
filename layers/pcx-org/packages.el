@@ -8,6 +8,9 @@
     ;; :defer t
     :config
     (progn
+      ;; ;; Fontify the whole line for headings (with a background color).
+      ;; (setq org-fontify-whole-heading-line t)
+
       ;; turn on golden-ratio window resizing
       ;; see: https://github.com/roman/golden-ratio.el
       ;; (golden-ratio-mode 1)
@@ -17,8 +20,11 @@
       ;; (add-hook 'text-mode-hook 'visual-line-mode)
       ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
-      ;; ;; may delete after update, to map meta-return
-      ;; (org-defkey org-mode-map [(meta return)] 'org-meta-return)
+      (add-hook 'org-mode-hook (lambda()
+                                 (define-key
+                                   evil-insert-state-local-map
+                                   (kbd "M-RET")
+                                   #'org-meta-return)))
 
       (setq org-export-with-smart-quotes t)
 
@@ -27,6 +33,8 @@
       ;; org-download screenshot method
       (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s")
       ;; (setq org-download-screenshot-method "screencapture")
+
+      ;; http://www.zmonster.me/2018/02/28/org-mode-capture.html
 
       ;; set for org-capture
       ;; (setq org-default-notes-file (concat org-directory "/capture.org"))
