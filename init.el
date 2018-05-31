@@ -157,6 +157,7 @@ This function should only modify configuration layer settings."
                                     saas-mode
                                     julia-mode
                                     fancy-battery
+                                    linum
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -564,15 +565,18 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   ;; dotspacemacs-line-numbers nil
-   dotspacemacs-line-numbers '(:relative t
-                                         :disabled-for-modes dired-mode
-                                         doc-view-mode
-                                         markdown-mode
-                                         org-mode
-                                         pdf-view-mode
-                                         text-mode
-                                         :size-limit-kb 1000)
+   ;; dotspacemacs-line-numbers t
+   ;; dotspacemacs-line-numbers '(:relative t
+   ;;                                       :disabled-for-modes dired-mode
+   ;;                                       doc-view-mode
+   ;;                                       markdown-mode
+   ;;                                       org-mode
+   ;;                                       pdf-view-mode
+   ;;                                       text-mode
+   ;;                                       :size-limit-kb 1000)
+   ;; dotspacemacs-line-numbers '(:relative t
+   ;;                             :size-limit-kb 1000)
+
    ;; (default nil)
 
    ;; If non nil then the last auto saved layouts are resume automatically upon
@@ -607,13 +611,25 @@ before packages are loaded."
 
   ;; ;; By pcx ;; ;;
 
+  ;; UI
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  ;; or 'dark, to switch to white title text
+  (add-to-list 'default-frame-alist '(ns-appearance . 'nil))
+  (add-to-list 'default-frame-alist '(left-fringe . 11))
+  (add-to-list 'default-frame-alist '(right-fringe . 11))
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars. nil))
+  (add-to-list 'default-frame-alist '(internal-border-width . 0))
+  ;; frame size on start
+  (add-to-list 'default-frame-alist '(width . 100))
+  (add-to-list 'default-frame-alist '(height . 50))
+
   ;; for Chinese character 等宽: Source Code Pro 13 + STkaiti 16
   (setq face-font-rescale-alist `(("STKaiti" . ,(/ 16.0 13))))
   (set-fontset-font t 'han      (font-spec :family "STKaiti"))
   (set-fontset-font t 'cjk-misc (font-spec :family "STKaiti"))
 
 
-  ;; ;; my keybindings
+  ;; ;; keybindings
   ;; In smartparens-mode
   ;;  https://ebzzry.io/en/emacs-pairs/
   ;; (define-key evil-insert-state-map (kbd "C-;") 'sp-up-sexp)
@@ -660,7 +676,7 @@ before packages are loaded."
   ;; ;; blink cursur place
   ;; (beacon-mode 1)
 
-  ;; from lujun9972
+  ;; ;; from lujun9972
   (setq scroll-margin 5
         scroll-conservatively 9999
         scroll-step 1)
@@ -796,7 +812,7 @@ before packages are loaded."
       ;;   (use-package lsp-flycheck)
       ;;   )
       )
-  )
+    )
 
   (use-package company-lsp
     :config
@@ -812,18 +828,18 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (csv-mode org-plus-contrib yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-gitflow macrostep lsp-vue lsp-ui lsp-python lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode launchctl js2-refactor js-doc indent-guide importmagic impatient-mode hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump doom-themes dockerfile-mode docker diminish cython-mode counsel-projectile company-web company-tern company-statistics company-lsp company-go company-auctex company-anaconda column-enforce-mode coffee-mode clean-aindent-mode centered-cursor-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(package-selected-packages
+     (quote
+      (smartparens helm helm-core which-key yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-ui lsp-python lsp-javascript-typescript lorem-ipsum livid-mode live-py-mode link-hint launchctl json-navigator js2-refactor js-doc indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-guru go-eldoc gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump doom-themes dockerfile-mode docker diminish cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )

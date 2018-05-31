@@ -34,6 +34,23 @@
       (setq org-download-screenshot-method "/usr/sbin/screencapture -i %s")
       ;; (setq org-download-screenshot-method "screencapture")
 
+
+      ;; from https://www.reddit.com/r/emacs/comments/3pw2qq/orgmode_headings_and_blank_lines/
+      ;; control blank line before new entry
+      ;; This is controlled by the variable org-blank-before-new-entry.  Normally
+      ;; this is set to 'auto' by default to try to make the following entry for
+      ;; lists and headings the same as the current one -- if it has a blank line
+      ;; then the next entry will also.
+      ;;
+      ;; You can customize this variable to always or never include blank lines
+      ;; before new entries.
+      (setq org-blank-before-new-entry
+            '(
+              ;; (heading . always)
+              (plain-list-item . nil)
+              ))
+
+
       ;; http://www.zmonster.me/2018/02/28/org-mode-capture.html
 
       ;; set for org-capture
@@ -45,7 +62,7 @@
               ;; ("a" "Appointment" entry (file  "~/Dropbox/Textnotes/gcal.org" "Appointments")
               ;;  "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
               ("n" "Note" entry (file+headline "~/Dropbox/Textnotes/notes.org" "Captured Notes")
-               "* Note %?\nCreated: %T")
+               "* Note %?\nCreated: %U")
               ;; ("l" "Link" entry (file+headline "~/Dropbox/Textnotes/links.org" "Links")
               ;;  "* %? %^L %^g \n%T" :prepend t)
               ;; ("b" "Blog idea" entry (file+headline "~/Dropbox/Textnotes/i.org" "Blog Topics:")
@@ -53,7 +70,10 @@
               ("p" "Paper" entry (file+headline "~/Dropbox/Textnotes/PhD/unread-papers.org" "Papers Captured")
                "* TODO %? \n:PROPERTIES:\nCreated: %T\n:END:\n" :prepend t)
               ("t" "TODO Item" entry (file+headline "~/Dropbox/Orgzly/tasks.org" "Captured TODO Items")
-               "* TODO %? \n:PROPERTIES:\n:Created: %U\n:END:\n\n\n")
+               "* TODO %? \n:PROPERTIES:\n:Created: %T\n:END:\n\n\n")
+
+              ("l" "LinkedInfo TODO Item" entry (file+headline "~/gowork/src/gitlab.com/ddxgz/linkedinfo/TODOs.org" "Captured TODO Items")
+               "*** TODO %? %^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n")
 
               ("a"               ; key
                "Article"         ; name
