@@ -20,6 +20,9 @@
       ;; (add-hook 'text-mode-hook 'visual-line-mode)
       ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
+      ;; to enable entry list with visual line indention
+      (setq org-startup-indented t)
+
       (add-hook 'org-mode-hook (lambda()
                                  (define-key
                                    evil-insert-state-local-map
