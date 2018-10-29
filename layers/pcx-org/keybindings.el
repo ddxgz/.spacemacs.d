@@ -5,3 +5,7 @@
 ;; (org-defkey org-mode-map [(meta return)] 'org-meta-return)
 ;; (org-defkey evil-insert-state-local-map (kbd "M-RET") 'org-meta-return)
 
+;; insert ref link
+;; (org-defkey org-mode-map (kbd "<C-c> <C-i> c") 'org-ref-insert-link)
+(org-defkey org-mode-map (kbd "C-c r") 'org-ref-insert-link)
+

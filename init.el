@@ -126,7 +126,6 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       ;;by pcx;;
                                       ;; vetur
-                                      lsp-vue
                                       lsp-mode
                                       company-lsp
 
@@ -141,9 +140,12 @@ This function should only modify configuration layer settings."
                                       doom-themes
                                       ;;interleave
                                       yasnippet-snippets
-                                      (vue-mode :location (recipe
-                                                           :fetcher github
-                                                           :repo "codefalling/vue-mode"))
+                                      lsp-vue
+                                      vue-mode
+                                      ;; (vue-mode :location (recipe
+                                      ;;                      :fetcher github
+                                      ;;                      :repo "codefalling/vue-mode"))
+                                      ;; company-quickhelp
                                       deft
                                       exec-path-from-shell
                                       )
@@ -657,9 +659,9 @@ before packages are loaded."
 
 
   ;; load awesome-tab
-  (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/elisp"))
-  (use-package awesome-tab)
-  (awesome-tab-build-helm-source)
+  ;; (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/elisp"))
+  ;; (use-package awesome-tab)
+  ;; (awesome-tab-build-helm-source)
 
   ;; ;; for vim
   ;; ;; set escape keybinding to "jk"
@@ -760,8 +762,12 @@ before packages are loaded."
       (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . web-mode))
       (add-to-list 'auto-mode-alist '("\\.gotmpl\\'" . web-mode))
       (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+      (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
       ;; auto highlight for pasted code in web-mode
       (setq web-mode-enable-auto-indentation t)
+      (add-hook 'web-mode-hook 'company-mode)
+      (add-hook 'web-mode-hook 'lsp-vue-enable)
       )
     )
 
@@ -824,17 +830,29 @@ before packages are loaded."
     (progn
       (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable)
       (add-hook 'vue-mode-hook 'flycheck-mode)
-      ;; (with-eval-after-load 'lsp-mode
-      ;;   (use-package lsp-flycheck)
-      ;;   )
+      (with-eval-after-load 'lsp-mode
+        (use-package lsp-ui-flycheck)
+        )
       )
     )
 
   (use-package company-lsp
     :config
     (push 'company-lsp company-backends)
+    (setq company-lsp-enable-snippet t)
     )
 
+  (use-package company
+    :ensure
+    :config
+    (setq company-minimum-prefix-length 1)
+    (setq company-dabbrev-downcase nil)
+    (setq company-idle-delay 0.5)
+    (setq company-idle-delay 0.5)
+    ;; (add-hook 'company-mode-hook 'company-quickhelpmode)
+    (add-to-list 'company-backends 'company-lsp))
+
+  ;; (use-package company-quickhelp :ensure)
 
   (use-package deft
     :bind ("<f8>" . deft)
@@ -862,7 +880,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets org-ref lsp-vue lsp-ui flyspell-correct-helm flyspell-correct evil-mc evil-matchit evil-escape dumb-jump doom-themes doom-modeline dockerfile-mode docker counsel-projectile counsel ivy company-lsp ess julia-mode iedit smartparens company htmlize yasnippet multiple-cursors avy typescript-mode lsp-mode projectile magit git-commit ghub treepy graphql pythonic dash evil hydra yapfify yaml-mode xterm-color ws-butler with-editor winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree toml-mode toc-org tagedit symon swiper string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-python lsp-javascript-typescript lsp-go lorem-ipsum livid-mode live-py-mode link-hint launchctl key-chord json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag goto-chg golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode docker-tramp diminish deft cython-mode csv-mode company-web company-tern company-statistics company-lua company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+    (company-quickhelp yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-ui lsp-python lsp-javascript-typescript lsp-go lorem-ipsum livid-mode live-py-mode link-hint launchctl json-navigator js2-refactor js-doc indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-themes doom-modeline dockerfile-mode docker diminish deft cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

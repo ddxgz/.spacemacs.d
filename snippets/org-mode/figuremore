@@ -6,5 +6,5 @@
 #+CAPTION: ${1:caption}
 #+ATTR_ORG: :width 300% :height 300%
 #+ATTR_HTML: :width 30% :height 30%
-#+ATTR_LaTeX: ${2:scale=0.75} :float t
+#+ATTR_LaTeX: :width ${2:7}cm :float t
 #+LABEL: fig:${3:label}
