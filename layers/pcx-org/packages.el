@@ -134,7 +134,7 @@
 
     ;;;;;;;;;;;;;;;;;; text face ;;;;;;;;;;;;;;;;;;;;;
       ;; hide the slash(/abc/), asterisks(*abc*) characters for emphasized text
-      ;; (setq org-hide-emphasis-markers t)
+      (setq org-hide-emphasis-markers t)
       ;; (setq org-hide-emphasis-markers nil)
 
       ;; change what face is used to display bold (or any other) markup by adding a new entry to org-emphasis-alist
@@ -162,7 +162,8 @@
                    '("/" (:slant italic :foreground "#1d829e")
                      ))
       (add-to-list 'org-emphasis-alist
-                   '("_" (:slant oblique :foreground "#96bf33")
+                   ;; '("_" (:slant oblique :foreground "#96bf33")
+                   '("_" (:underline t :foreground "#96bf33")
                      ))
 
       ;; (setq org-src-fontify-natively t)
