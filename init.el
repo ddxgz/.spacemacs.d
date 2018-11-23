@@ -658,7 +658,10 @@ before packages are loaded."
   (global-set-key (kbd "C-c y") 'yas-insert-snippet)
 
   ;; key for helm functions
-  (spacemacs/set-leader-keys "s C-l" 'helm-locate)
+  (spacemacs/set-leader-keys "s C-l" 'spacemacs/resume-last-search-buffer)
+  ;; C-c C-x prompts for an external application from the list of all applications seen by Emacs
+  ;; C-c X open with default application
+  (spacemacs/set-leader-keys "s l" 'helm-locate)
 
 
   ;; load awesome-tab
