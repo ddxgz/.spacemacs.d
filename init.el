@@ -663,6 +663,14 @@ before packages are loaded."
   ;; C-c X open with default application
   (spacemacs/set-leader-keys "s l" 'helm-locate)
 
+  ;; for upcase and downcase 
+  (global-set-key (kbd "C-x t U") 'upcase-region)
+  (global-set-key (kbd "C-x t D") 'downcase-region)
+  (global-set-key (kbd "C-x t C") 'capitalize-region)
+  (global-set-key (kbd "C-x t u") 'upcase-word)
+  (global-set-key (kbd "C-x t d") 'downcase-word)
+  (global-set-key (kbd "C-x t c") 'capitalize-word)
+
 
   ;; load awesome-tab
   ;; (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/elisp"))
