@@ -9,3 +9,6 @@
 ;; (org-defkey org-mode-map (kbd "<C-c> <C-i> c") 'org-ref-insert-link)
 (org-defkey org-mode-map (kbd "C-c r") 'org-ref-insert-link)
 
+;; interleave
+(org-defkey org-mode-map (kbd "C-c i") 'interleave-mode)
+
