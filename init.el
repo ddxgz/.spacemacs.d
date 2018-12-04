@@ -148,6 +148,7 @@ This function should only modify configuration layer settings."
                                       ;; company-quickhelp
                                       deft
                                       exec-path-from-shell
+                                      darkroom
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -550,13 +551,17 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    dotspacemacs-verify-spacelpa-archives t
 
    dotspacemacs-themes '(
-                         spacemacs-dark
                          spacemacs-light
                          doom-one
+                         spacemacs-dark
                          )
 
    dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
    ;; dotspacemacs-mode-line-unicode-symbols nil
+
+   ;; dotspacemacs-mode-line-theme 'doom
+   ;; (setq doom-modeline-buffer-file-name-style 'relative-to-project)
+   ;; (setq doom-modeline-icon nil)
 
    ;; Control line numbers activation.
    ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
@@ -663,7 +668,9 @@ before packages are loaded."
   ;; C-c X open with default application
   (spacemacs/set-leader-keys "s l" 'helm-locate)
 
-  ;; for upcase and downcase 
+  ;; for upcase and downcase
+  ;; to set it to only in text mode
+  ;; (spacemacs/declare-prefix "]" "bracket-prefix")
   (global-set-key (kbd "C-x t U") 'upcase-region)
   (global-set-key (kbd "C-x t D") 'downcase-region)
   (global-set-key (kbd "C-x t C") 'capitalize-region)
@@ -737,6 +744,8 @@ before packages are loaded."
   ;; (setq recentf-sava-file (format "/tmp/recentf.%s" (emacs-pid)))
 
 
+  (use-package darkroom)
+
   ;; (with-eval-after-load 'helm
   ;;   (setq helm-display-function 'helm-default-display-buffer))
 
@@ -790,6 +799,10 @@ before packages are loaded."
       (add-hook 'web-mode-hook 'lsp-vue-enable)
       )
     )
+
+  ;; (setq projectile-project-search-path '(
+  ;;                                        "~/Dropbox/Papers"
+  ;;                                        ))
 
   ;; (with-eval-after-load 'python
   ;; (use-package python
@@ -877,9 +890,9 @@ before packages are loaded."
   (use-package deft
     :bind ("<f8>" . deft)
     :commands (deft)
-    :config (setq deft-directory "~/Dropbox/mynotes"
+    :config (setq deft-directory "~/Dropbox/Textnotes"
                   deft-recursive t
-                  ;; deft-extensions '("md" "org")
+                  deft-extensions '("md" "org")
                   )
     )
 
@@ -900,7 +913,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets winum web-mode toc-org racer pytest pip-requirements paradox org-ref pdf-tools org-mime org-brain neotree lsp-vue lsp-ui lsp-python live-py-mode impatient-mode hl-todo highlight-numbers helm-make helm-bibtex parsebib go-guru git-timemachine git-link evil-surround evil-matchit editorconfig dumb-jump doom-themes doom-modeline dockerfile-mode docker deft counsel-projectile counsel swiper ivy company-lsp company-go company-anaconda anaconda-mode cargo aggressive-indent ace-window ace-link tern ess highlight iedit smartparens flycheck flyspell-correct go-mode company helm helm-core yasnippet avy typescript-mode rust-mode lsp-mode markdown-mode alert projectile magit magit-popup git-commit ghub with-editor which-key use-package hydra evil org-plus-contrib yapfify yaml-mode xterm-color ws-butler web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen undo-tree treepy toml-mode tagedit tablist symon string-inflection spinner spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters pyvenv pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv persp-mode pcre2el password-generator parent-mode ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-download org-bullets open-junk-file nginx-mode nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-rust lsp-javascript-typescript lsp-go lorem-ipsum log4e livid-mode link-hint launchctl key-chord julia-mode json-navigator json-mode js2-refactor js-doc interleave indent-guide importmagic hungry-delete htmlize highlight-parentheses highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag graphql goto-chg golden-ratio godoctor go-tag go-rename go-impl go-gen-test go-fill-struct go-eldoc gnuplot gntp gitignore-templates gitconfig-mode gitattributes-mode git-messenger gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-org evil-numbers evil-nerd-commenter evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval dotenv-mode docker-tramp diminish cython-mode csv-mode company-web company-tern company-statistics company-lua company-auctex column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex bind-key biblio auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk ace-jump-helm-line academic-phrases ac-ispell))))
+    (writeroom-mode visual-fill-column lsp-ui evil-magit evil-goggles dumb-jump doom-modeline counsel-projectile counsel auto-yasnippet ess flycheck avy lsp-mode ivy helm helm-core magit git-commit org-plus-contrib hydra yasnippet-snippets yapfify yaml-mode xterm-color ws-butler with-editor winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon swiper string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-rust lsp-python lsp-javascript-typescript lsp-go lorem-ipsum livid-mode live-py-mode link-hint launchctl julia-mode json-navigator js2-refactor js-doc interleave indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link ghub gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode doom-themes dockerfile-mode docker diminish deft darkroom cython-mode csv-mode company-web company-tern company-statistics company-lua company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex cargo auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

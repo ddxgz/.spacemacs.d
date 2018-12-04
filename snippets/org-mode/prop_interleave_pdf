@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: prop_interleave_pdf
+# key: prop_intlv
+# contributor: pcx <ddxgz19880813@gmail.com>
+# --
+:PROPERTIES:
+:INTERLEAVE_PDF: ${1:pathfile}
+:END:

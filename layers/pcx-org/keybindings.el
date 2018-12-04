@@ -12,3 +12,9 @@
 ;; interleave
 (org-defkey org-mode-map (kbd "C-c i") 'interleave-mode)
 
+;; global key to open tasks.org anywhere
+(global-set-key (kbd "C-c f t") (lambda() (interactive)(find-file "~/Dropbox/Orgzly/tasks.org")))
+
+(global-set-key (kbd "C-c f n") (lambda() (interactive)(find-file "~/Dropbox/Textnotes/Notebook/notebook.org")))
+
+(global-set-key (kbd "C-c f u") (lambda() (interactive)(find-file "~/Dropbox/Textnotes/PhD/unread-papers.org")))

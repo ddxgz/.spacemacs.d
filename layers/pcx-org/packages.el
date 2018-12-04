@@ -134,8 +134,8 @@
 
     ;;;;;;;;;;;;;;;;;; text face ;;;;;;;;;;;;;;;;;;;;;
       ;; hide the slash(/abc/), asterisks(*abc*) characters for emphasized text
-      (setq org-hide-emphasis-markers t)
-      ;; (setq org-hide-emphasis-markers nil)
+      ;; (setq org-hide-emphasis-markers t)
+      (setq org-hide-emphasis-markers nil)
 
       ;; change what face is used to display bold (or any other) markup by adding a new entry to org-emphasis-alist
       ;; refer to Font section in Documentation:
