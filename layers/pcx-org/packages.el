@@ -292,6 +292,18 @@
       ;; refer to https://github.com/tkf/org-mode/blob/master/lisp/org-latex.el
       (with-eval-after-load 'ox-latex
         (add-to-list 'org-latex-classes
+                     '("sagej"
+                       "\\documentclass{sagej}
+                        [NO-DEFAULT-PACKAGES]
+                        [PACKAGES]
+                        [EXTRA]"
+                       ("\\section{%s}" . "\\section*{%s}")
+                       ("\\subsection{%s}" . "\\subsection*{%s}")
+                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")
+                       ))
+        (add-to-list 'org-latex-classes
                      '("elsarticle"
                        "\\documentclass{elsarticle}
                         [NO-DEFAULT-PACKAGES]
