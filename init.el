@@ -150,7 +150,7 @@ This function should only modify configuration layer settings."
                                       ;; company-quickhelp
                                       deft
                                       exec-path-from-shell
-                                      darkroom
+                                      ;; darkroom
                                       pdf-tools
                                       )
 
@@ -555,9 +555,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    dotspacemacs-verify-spacelpa-archives t
 
    dotspacemacs-themes '(
-                         spacemacs-light
-                         doom-one
                          spacemacs-dark
+                         doom-one
+                         spacemacs-light
                          )
 
    dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
@@ -627,13 +627,13 @@ before packages are loaded."
   ;; ;; By pcx ;; ;;
 
   ;; UI
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  ;; or 'dark, to switch to white title text
-  (add-to-list 'default-frame-alist '(ns-appearance . 'nil))
-  (add-to-list 'default-frame-alist '(left-fringe . 11))
-  (add-to-list 'default-frame-alist '(right-fringe . 11))
-  (add-to-list 'default-frame-alist '(vertical-scroll-bars. nil))
-  (add-to-list 'default-frame-alist '(internal-border-width . 0))
+  ;; (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  ;; ;; or 'dark, to switch to white title text
+  ;; (add-to-list 'default-frame-alist '(ns-appearance . 'nil))
+  ;; (add-to-list 'default-frame-alist '(left-fringe . 11))
+  ;; (add-to-list 'default-frame-alist '(right-fringe . 11))
+  ;; (add-to-list 'default-frame-alist '(vertical-scroll-bars. nil))
+  ;; (add-to-list 'default-frame-alist '(internal-border-width . 0))
   ;; frame size on start
   (add-to-list 'default-frame-alist '(width . 100))
   (add-to-list 'default-frame-alist '(height . 50))
@@ -675,12 +675,12 @@ before packages are loaded."
   ;; for upcase and downcase
   ;; to set it to only in text mode
   ;; (spacemacs/declare-prefix "]" "bracket-prefix")
-  (global-set-key (kbd "C-x t U") 'upcase-region)
-  (global-set-key (kbd "C-x t D") 'downcase-region)
-  (global-set-key (kbd "C-x t C") 'capitalize-region)
-  (global-set-key (kbd "C-x t u") 'upcase-word)
-  (global-set-key (kbd "C-x t d") 'downcase-word)
-  (global-set-key (kbd "C-x t c") 'capitalize-word)
+  (global-set-key (kbd "C-x t u") 'upcase-region)
+  (global-set-key (kbd "C-x t d") 'downcase-region)
+  (global-set-key (kbd "C-x t c") 'capitalize-region)
+  (global-set-key (kbd "C-x t U") 'upcase-word)
+  ;; (global-set-key (kbd "C-x t d") 'downcase-word)
+  ;; (global-set-key (kbd "C-x t c") 'capitalize-word)
 
 
   ;; load awesome-tab
@@ -865,13 +865,13 @@ before packages are loaded."
 
   (use-package lsp-vue
     :config
-    (progn
+    ;; (progn
       (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable)
-      (add-hook 'vue-mode-hook 'flycheck-mode)
-      (with-eval-after-load 'lsp-mode
-        (use-package lsp-ui-flycheck)
-        )
-      )
+      ;; (add-hook 'vue-mode-hook 'flycheck-mode)
+      ;; (with-eval-after-load 'lsp-mode
+      ;;   (use-package lsp-ui-flycheck)
+      ;;   )
+      ;; )
     )
 
   (use-package company-lsp

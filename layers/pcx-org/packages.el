@@ -163,7 +163,8 @@
                      ))
       (add-to-list 'org-emphasis-alist
                    ;; '("_" (:slant oblique :foreground "#96bf33")
-                   '("_" (:underline t :foreground "#96bf33")
+                   ;; '("_" (:underline t :foreground "#d33264")
+                   '("_" (:underline t :foreground "#d6a525")
                      ))
 
       ;; (setq org-src-fontify-natively t)
