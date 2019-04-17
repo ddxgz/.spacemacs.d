@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: org inline comment
+# key: incmt
+# --
+{{{comment(/${1:comment}/)}}}

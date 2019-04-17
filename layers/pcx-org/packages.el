@@ -20,6 +20,9 @@
       ;; (add-hook 'text-mode-hook 'visual-line-mode)
       ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
+      ;; add hook to enable smartparens in org-mode
+      (add-hook 'org-mode-hook #'smartparens-mode)
+
       ;; to enable entry list with visual line indention
       (setq org-startup-indented t)
 
@@ -64,15 +67,17 @@
             '(
               ;; ("a" "Appointment" entry (file  "~/Dropbox/Textnotes/gcal.org" "Appointments")
               ;;  "* TODO %?\n:PROPERTIES:\n\n:END:\nDEADLINE: %^T \n %i\n")
-              ("n" "Note" entry (file+headline "~/Dropbox/Textnotes/notes.org" "Captured Notes")
-               "* Note %?\nCreated: %U")
+              ;; ("n" "Note" entry (file+headline "~/Dropbox/Textnotes/notes.org" "Captured Notes")
+              ("n" "Note" entry (file+headline "~/Dropbox/Textnotes/handbook.org" "Captured Notes")
+               "* [Note] %? \n:PROPERTIES:\n:Created: %U\n:END:\n\n\n")
               ;; ("l" "Link" entry (file+headline "~/Dropbox/Textnotes/links.org" "Links")
               ;;  "* %? %^L %^g \n%T" :prepend t)
               ;; ("b" "Blog idea" entry (file+headline "~/Dropbox/Textnotes/i.org" "Blog Topics:")
               ;;  "* %?\n%T" :prepend t)
               ("p" "Paper" entry (file+headline "~/Dropbox/Textnotes/PhD/unread-papers.org" "Papers Captured")
                "* TODO %? \n:PROPERTIES:\nCreated: %T\n:END:\n" :prepend t)
-              ("t" "TODO Item" entry (file+headline "~/Dropbox/Orgzly/tasks.org" "Captured TODO Items")
+              ;; ("t" "TODO Item" entry (file+headline "~/Dropbox/Orgzly/handbook.org" "Captured TODO Items")
+              ("t" "TODO Item" entry (file+headline "~/Dropbox/Textnotes/handbook.org" "Captured TODO Items")
                "* TODO %? \n:PROPERTIES:\n:Created: %T\n:END:\n\n\n")
 
               ("l" "LinkedInfo TODO Item" entry (file+headline "~/gowork/src/gitlab.com/ddxgz/linkedinfo/TODOs.org" "Captured TODO Items")
@@ -123,7 +128,28 @@
       ;;         ;; ("DONE" . (:foreground "LightSalmon" :weight bold :strike-through t))
       ;;         ))
 
+
+      ;; (setq org-todo-keywords
+      ;;       '(
+      ;;         (sequence "TODO" "DOIN" "|" "DONE" "CANC")
+      ;;         ;; (sequence "SENT" "APPROVED" "|" "PAID")
+      ;;         ))
+
+      (setq org-todo-keyword-faces
+            '(
+              ;; ("DOIN" . "#E35DBF")
+              ;; ("DOIN" . (:foreground "red" :weight bold))
+              ("DOIN" . (:foreground "#E35DBF" :weight bold))
+              ;; ("CANC" . (:foreground "white" :background "#4d4d4d" :weight bold))
+              ("DONE" . (:foreground "green" :weight bold :strike-through t))
+              ("CANC" . (:foreground "grey" :weight bold :strike-through t))
+              ;; ("DELEGATED" . "pink")
+              ("PAUS" . (:foreground "base" :weight bold))))
+
+
       (setq org-tag-alist '((:startgroup . nil)
+                            ("GTD")
+                            (:grouptags)
                             ("next" . ?n) ("soon" . ?s) ("later" . ?l)
                             (:endgroup . nil)
                             ("reviewpaper" . ?r)
@@ -159,7 +185,9 @@
                    '("*" (:weight bold :foreground "#d13632")
                      ))
       (add-to-list 'org-emphasis-alist
-                   '("/" (:slant italic :foreground "#1d829e")
+                   ;; '("/" (:slant italic :foreground "#1d829e")
+                   ;; '("/" (:slant italic :foreground "#8a2aa7")
+                   '("/" (:slant italic :foreground "#503fa9")
                      ))
       (add-to-list 'org-emphasis-alist
                    ;; '("_" (:slant oblique :foreground "#96bf33")
@@ -293,6 +321,31 @@
       ;; refer to https://github.com/tkf/org-mode/blob/master/lisp/org-latex.el
       (with-eval-after-load 'ox-latex
         (add-to-list 'org-latex-classes
+                     '("bth-thesis"
+                       "\\documentclass{bth-thesis}
+                        [NO-DEFAULT-PACKAGES]
+                        [PACKAGES]
+                        [EXTRA]"
+                       ("\\chapter{%s}" . "\\chapter*{%s}")
+                       ("\\section{%s}" . "\\section*{%s}")
+                       ("\\subsection{%s}" . "\\subsection*{%s}")
+                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                       ;; ("\\subparagraph{%s}" . "\\subparagraph*{%s}")
+                       ))
+        (add-to-list 'org-latex-classes
+                     '("mdpi"
+                       "\\documentclass{Definitions/mdpi}
+                        [NO-DEFAULT-PACKAGES]
+                        [PACKAGES]
+                        [EXTRA]"
+                       ("\\section{%s}" . "\\section*{%s}")
+                       ("\\subsection{%s}" . "\\subsection*{%s}")
+                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                       ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                       ("\\subparagraph{%s}" . "\\subparagraph*{%s}")
+                       ))
+        (add-to-list 'org-latex-classes
                      '("sagej"
                        "\\documentclass{sagej}
                         [NO-DEFAULT-PACKAGES]
@@ -374,6 +427,9 @@
       ;; (add-hook 'text-mode-hook 'visual-line-mode)
       (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
       (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
+
+      ;; (add-hook 'org-mode-hook (lambda ()
+      ;;                            (push '(?+ . ("+" . "+")) evil-surround-pairs-alist)))
 
       ;; ;; hook for set font face to pitch mode (non-monospace font) for text file. See custom-set-faces
       ;; (defun set-buffer-variable-pitch ()

@@ -33,9 +33,7 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(lua
-     csv
-     rust
+   '(
      spacemacs-completion
      spacemacs-layouts
      spacemacs-editing
@@ -51,10 +49,10 @@ This function should only modify configuration layer settings."
      spacemacs-visual
 
      pcx-org
-     ;; rust
-     ;; csv
      ;; restclient
-
+     rust
+     lua
+     csv
      docker
      plantuml
      nginx
@@ -62,7 +60,11 @@ This function should only modify configuration layer settings."
      ;; If you have problem entering symbols that are behind the ⌥ key you may want to set the variables as follows. This will allow you to use the right ⌥ key to write symbols. The left ⌥ key can be used as the Meta key.
      (osx :variables osx-option-as 'meta
           osx-right-option-as 'none)
-     (go :variables go-tab-width 4)
+     (go :variables
+         go-backend 'lsp
+         go-tab-width 4)
+     (java :variables
+           java-backend 'lsp)
      ess
      ;; csv
      html
@@ -142,14 +144,14 @@ This function should only modify configuration layer settings."
                                       doom-themes
                                       interleave
                                       yasnippet-snippets
-                                      lsp-vue
-                                      vue-mode
+                                      ;; lsp-vue
+                                      ;; vue-mode
                                       ;; (vue-mode :location (recipe
                                       ;;                      :fetcher github
                                       ;;                      :repo "codefalling/vue-mode"))
                                       ;; company-quickhelp
                                       deft
-                                      exec-path-from-shell
+                                      ;; exec-path-from-shell
                                       ;; darkroom
                                       pdf-tools
                                       )
@@ -555,8 +557,12 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    dotspacemacs-verify-spacelpa-archives t
 
    dotspacemacs-themes '(
+                         ;; doom-one
+                         ;; doom-one-light
+                         ;; doom-solarized-light
+                         ;; doom-nord-light
+                         ;; leuven
                          spacemacs-dark
-                         doom-one
                          spacemacs-light
                          )
 
@@ -685,14 +691,22 @@ before packages are loaded."
 
   ;; load awesome-tab
   ;; (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/elisp"))
-  ;; (use-package awesome-tab)
+  ;; ;; (use-package awesome-tab)
   ;; (use-package awesome-tab
-  ;;   :load-path "~/.spacemacs.d/elisp/awesome-tab.el"
+  ;;   ;; :load-path "~/.spacemacs.d/elisp/awesome-tab.el"
   ;;   :config
   ;;   (awesome-tab-mode t)
+  ;;   (spacemacs/set-leader-keys "bh" 'awesome-tab-backward)
+  ;;   (spacemacs/set-leader-keys "bl" 'awesome-tab-forward)
+  ;;   (spacemacs/set-leader-keys "bj" 'awesome-tab-backward-group)
+  ;;   (spacemacs/set-leader-keys "bk" 'awesome-tab-forward-group)
+  ;;   (setq awesome-tab-cycle-scope 'tabs) ; Navigate through visible tabs only.
+  ;;   (setq awesome-tab-style "alternate")
+  ;;   ;; (awesome-tab-build-helm-source)
+  ;;   ;; (add-to-list 'helm-source-buffers-list, 'helm-source-awesome-tab-group)
   ;;   )
-  ;; (awesome-tab-build-helm-source)
-  ;; (add-to-list 'helm-source-list, 'helm-source-awesome-tab-group)
+
+  ;; (setq helm-boring-buffer-regexp-list (list (rx "magit") (rx "*helm")))
 
   ;; ;; for vim
   ;; ;; set escape keybinding to "jk"
@@ -749,10 +763,16 @@ before packages are loaded."
 
   (use-package pdf-tools)
 
+  (setq doc-view-resolution 192)
+
   ;; (use-package darkroom)
 
   ;; (with-eval-after-load 'helm
   ;;   (setq helm-display-function 'helm-default-display-buffer))
+
+  ;; Enable fuzzy matching in locate
+  ;; To use mdfind, disable helm-locate-fuzzy-match. If it is set to t and mdfind is used, helm-locate won’t show any results.
+  ;; (setq helm-locate-fuzzy-match t)
 
   ;; for set flycheck to only check when save
   ;; (with-eval-after-load 'flycheck
@@ -767,25 +787,28 @@ before packages are loaded."
   ;; (use-package magit
   ;;   :defer t)
 
-  ;; get system shell's env to emacs
-  (use-package exec-path-from-shell
-    :ensure t
-    :init (progn
-            ;; locale for shell
-            (exec-path-from-shell-copy-env "LC_ALL")
-            (exec-path-from-shell-copy-env "LANG")
+  ;; ;; get system shell's env to emacs
+  ;; (use-package exec-path-from-shell
+  ;;   :ensure t
+  ;;   :init (progn
+  ;;           ;; locale for shell
+  ;;           (exec-path-from-shell-copy-env "LC_ALL")
+  ;;           (exec-path-from-shell-copy-env "LANG")
 
-            (when(not(eq system-type 'windows-nt))
-              ;; (setq exec-path-from-shell-variables '("GOPATH"))
-              ;; when it is nil, exec-path-from-shell will read environment variable
-              ;; from .zshenv instead of .zshrc, but makes sure that you put all
-              ;; environment variable you need in .zshenv rather than .zshrc
-              (setq exec-path-from-shell-check-startup-files nil) ;
-              (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
-              (exec-path-from-shell-initialize)
-              )
-            )
-    )
+  ;;           (when(not(eq system-type 'windows-nt))
+  ;;             ;; (setq exec-path-from-shell-variables '("GOPATH"))
+  ;;             ;; when it is nil, exec-path-from-shell will read environment variable
+  ;;             ;; from .zshenv instead of .zshrc, but makes sure that you put all
+  ;;             ;; environment variable you need in .zshenv rather than .zshrc
+  ;;             (setq exec-path-from-shell-check-startup-files nil) ;
+  ;;             (setq exec-path-from-shell-arguments '("-l" )) ;remove -i read form .zshenv
+  ;;             (exec-path-from-shell-initialize)
+  ;;             )
+  ;;           )
+  ;;   )
+
+  ;; ;; set magit buffers as useless buffers that not shown in helm-mini
+  ;; (setq spacemacs-useless-buffers-regexp '("magit\.\+"))
 
   ;; ;; for layers ;; ;;
 
@@ -849,30 +872,33 @@ before packages are loaded."
   ;; ;; vue mode
   ;; (defun dotspacemacs/init-vue-mode ()
   ;;   (use-package vue-mode))
-  (use-package vue-mode
-    :defer t
-    :config
-    (add-to-list 'vue-mode-hook #'smartparens-mode)
-    )
+  ;; (use-package vue-mode
+  ;;   :defer t
+  ;;   :config
+  ;;   (add-to-list 'vue-mode-hook #'smartparens-mode)
+  ;;   )
 
   (use-package lsp-mode)
   (use-package lsp-ui
-    :config
+    :init
     (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+    :config
+    ;; (setq lsp-ui-sideline-enable nil)
+    (setq lsp-ui-sideline-show-hover nil)
     )
 
   (setq lsp-message-project-root-warning t) ;avoid popup warning buffer if lsp can't found root directory (such as edit simple *.py file)
 
-  (use-package lsp-vue
-    :config
-    ;; (progn
-      (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable)
-      ;; (add-hook 'vue-mode-hook 'flycheck-mode)
-      ;; (with-eval-after-load 'lsp-mode
-      ;;   (use-package lsp-ui-flycheck)
-      ;;   )
-      ;; )
-    )
+  ;; (use-package lsp-vue
+  ;;   :config
+  ;;   ;; (progn
+  ;;     (add-hook 'vue-mode-hook #'lsp-vue-mmm-enable)
+  ;;     ;; (add-hook 'vue-mode-hook 'flycheck-mode)
+  ;;     ;; (with-eval-after-load 'lsp-mode
+  ;;     ;;   (use-package lsp-ui-flycheck)
+  ;;     ;;   )
+  ;;     ;; )
+  ;;   )
 
   (use-package company-lsp
     :config
@@ -898,6 +924,7 @@ before packages are loaded."
     :config (setq deft-directory "~/Dropbox/Textnotes"
                   deft-recursive t
                   deft-extensions '("md" "org")
+                  deft-use-filename-as-title t
                   )
     )
 
@@ -916,9 +943,11 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/Dropbox/Papers/notes-papers.org")))
+ '(org-agenda-tags-column (quote auto))
  '(package-selected-packages
    (quote
-    (orgit org-ref lsp-ui live-py-mode highlight-indentation git-timemachine flyspell-correct-helm flyspell-correct evil-nerd-commenter dumb-jump doom-modeline cargo counsel swiper ivy ess company helm lsp-mode magit magit-popup git-commit ghub projectile evil yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode with-editor winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treepy toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pdf-tools pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-rust lsp-python lsp-javascript-typescript lsp-go lorem-ipsum livid-mode link-hint launchctl key-chord julia-mode json-navigator js2-refactor js-doc interleave indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-bibtex helm-ag graphql goto-chg golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-messenger git-link gh-md fuzzy font-lock+ flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode doom-themes dockerfile-mode docker diminish deft darkroom cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-lsp company-go company-auctex company-anaconda column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-window ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+    (gradle-mode helm-gtags ggtags counsel-gtags rust-mode yasnippet-snippets org-download evil-magit dumb-jump doom-modeline company-go centered-cursor-mode ace-window auctex counsel swiper ess flycheck company avy lsp-mode ivy helm helm-core magit visual-fill-column org-plus-contrib hydra yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-ui lorem-ipsum livid-mode live-py-mode link-hint launchctl julia-mode json-navigator js2-refactor js-doc interleave indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode doom-themes dockerfile-mode docker diminish deft cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-lsp company-auctex company-anaconda column-enforce-mode clean-aindent-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-link ace-jump-helm-line academic-phrases ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
