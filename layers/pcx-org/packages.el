@@ -20,11 +20,21 @@
       ;; (add-hook 'text-mode-hook 'visual-line-mode)
       ;; (add-hook 'text-mode-hook 'spacemacs/toggle-fill-column-indicator-off)
 
+      ;; (use-package ox-extra
+      ;;   :config
+        ;; (ox-extras-activate '(ignore-headlines))
+        ;; )
+
+
       ;; add hook to enable smartparens in org-mode
       (add-hook 'org-mode-hook #'smartparens-mode)
 
       ;; to enable entry list with visual line indention
       (setq org-startup-indented t)
+
+      ;; ;; to enable auto fill-column as 80
+      ;; (add-hook 'org-mode-hook '(lambda () (setq fill-column 80)))
+      ;; (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
       (add-hook 'org-mode-hook (lambda()
                                  (define-key
@@ -80,7 +90,7 @@
               ("t" "TODO Item" entry (file+headline "~/Dropbox/Textnotes/handbook.org" "Captured TODO Items")
                "* TODO %? \n:PROPERTIES:\n:Created: %T\n:END:\n\n\n")
 
-              ("l" "LinkedInfo TODO Item" entry (file+headline "~/gowork/src/gitlab.com/ddxgz/linkedinfo/TODOs.org" "Captured TODO Items")
+              ("l" "LinkedInfo TODO Item" entry (file+headline "~/code/linkedinfo/TODOs.org" "Captured TODO Items")
                "*** TODO %? %^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n")
 
               ("a"               ; key
@@ -141,7 +151,8 @@
               ;; ("DOIN" . (:foreground "red" :weight bold))
               ("DOIN" . (:foreground "#E35DBF" :weight bold))
               ;; ("CANC" . (:foreground "white" :background "#4d4d4d" :weight bold))
-              ("DONE" . (:foreground "green" :weight bold :strike-through t))
+              ;; ("DONE" . (:foreground "dark green" :weight bold :strike-through t))
+              ("DONE" . (:foreground "#84E297" :weight bold :strike-through t))
               ("CANC" . (:foreground "grey" :weight bold :strike-through t))
               ;; ("DELEGATED" . "pink")
               ("PAUS" . (:foreground "base" :weight bold))))
@@ -187,7 +198,7 @@
       (add-to-list 'org-emphasis-alist
                    ;; '("/" (:slant italic :foreground "#1d829e")
                    ;; '("/" (:slant italic :foreground "#8a2aa7")
-                   '("/" (:slant italic :foreground "#503fa9")
+                   '("/" (:slant italic :foreground "#458631")
                      ))
       (add-to-list 'org-emphasis-alist
                    ;; '("_" (:slant oblique :foreground "#96bf33")
@@ -311,15 +322,27 @@
 
         (setq org-latex-listings 'minted
               org-latex-packages-alist '(("" "minted"))
+              ;; org-latex-pdf-process
+              ;; '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+              ;;   "bibtex %b"
+              ;;   "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+              ;;   "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
               org-latex-pdf-process
-              '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+              '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
                 "bibtex %b"
-                "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-                "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+                "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+                "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
         )
 
       ;; refer to https://github.com/tkf/org-mode/blob/master/lisp/org-latex.el
       (with-eval-after-load 'ox-latex
+        (add-to-list 'org-latex-classes
+                     '("awesome-cv"
+                       "\\documentclass{awesome-cv}
+                        [NO-DEFAULT-PACKAGES]
+                        [PACKAGES]
+                        [EXTRA]"
+                       ))
         (add-to-list 'org-latex-classes
                      '("bth-thesis"
                        "\\documentclass{bth-thesis}
@@ -448,14 +471,14 @@
       ;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
 
       ;; to skip spell check for certain regions
-      (defun endless/org-ispell ()
-        ;; "Configure `ispell-skip-region-alist' for `org-mode'."
-        (make-local-variable 'ispell-skip-region-alist)
-        (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
-        (add-to-list 'ispell-skip-region-alist '("~" "~"))
-        (add-to-list 'ispell-skip-region-alist '("=" "="))
-        (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
-      (add-hook 'org-mode-hook #'endless/org-ispell)
+      ;; (defun endless/org-ispell ()
+      ;;   ;; "Configure `ispell-skip-region-alist' for `org-mode'."
+      ;;   (make-local-variable 'ispell-skip-region-alist)
+      ;;   (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+      ;;   (add-to-list 'ispell-skip-region-alist '("~" "~"))
+      ;;   (add-to-list 'ispell-skip-region-alist '("=" "="))
+      ;;   (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+      ;; (add-hook 'org-mode-hook #'endless/org-ispell)
 
       )
     )

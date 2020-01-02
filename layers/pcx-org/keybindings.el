@@ -20,6 +20,9 @@
 ;; (global-set-key (kbd "C-c f t") (lambda() (interactive)(find-file "~/Dropbox/Orgzly/tasks.org")))
 
 
+(global-set-key (kbd "C-c f q") (lambda () (interactive)(find-file "~/Dropbox/Textnotes/quicknote.org" )))
+(which-key-add-key-based-replacements "C-c f q" "quicknotes")
+
 (global-set-key (kbd "C-c f h") (lambda () (interactive)(find-file "~/Dropbox/Textnotes/handbook.org")))
 (which-key-add-key-based-replacements "C-c f h" "handbook")
 
@@ -38,3 +41,8 @@
 (global-set-key (kbd "C-c f c") (lambda () (interactive)(find-file "~/Dropbox/Textnotes/courses/course notes.org" )))
 (which-key-add-key-based-replacements "C-c f c" "course-notes")
 ;; (pcx-set-key-open-file "C-c f c" "~/Dropbox/Textnotes/courses/course notes.org" "course-notes")
+(global-set-key (kbd "C-c f m") (lambda () (interactive)(find-file "~/Dropbox/Textnotes/Machine Learning/notes-machine-learning.org" )))
+(which-key-add-key-based-replacements "C-c f m" "machine learning")
+
+(global-set-key (kbd "C-c f j") (lambda () (interactive)(find-file "~/Dropbox/Textnotes/Job/job-notes.org" )))
+(which-key-add-key-based-replacements "C-c f j" "job notes")

@@ -1,3 +1,4 @@
+
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
@@ -34,7 +35,8 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     spacemacs-completion
+     (spacemacs-completion
+      :package (ivy))
      spacemacs-layouts
      spacemacs-editing
      spacemacs-editing-visual
@@ -44,51 +46,51 @@ This function should only modify configuration layer settings."
      spacemacs-modeline
      spacemacs-navigation
      spacemacs-org
-     spacemacs-project
+     ;; spacemacs-project
      ;; spacemacs-purpose
      spacemacs-visual
 
      pcx-org
      ;; restclient
-     rust
-     lua
-     csv
-     docker
-     plantuml
-     nginx
-     yaml
+     ;; rust
+     ;; lua
+     ;; csv
+     ;; docker
+     ;; plantuml
+     ;; nginx
+     ;; yaml
      ;; If you have problem entering symbols that are behind the ⌥ key you may want to set the variables as follows. This will allow you to use the right ⌥ key to write symbols. The left ⌥ key can be used as the Meta key.
      (osx :variables osx-option-as 'meta
           osx-right-option-as 'none)
-     (go :variables
-         go-backend 'lsp
-         go-tab-width 4)
-     (java :variables
-           java-backend 'lsp)
-     ess
+     ;; (go :variables
+     ;;     go-backend 'lsp
+     ;;     go-tab-width 4)
+     ;; (java :variables
+     ;;       java-backend 'lsp)
+     ;; ess
      ;; csv
-     html
-     javascript
+     ;; html
+     ;; javascript
      bibtex
      ;; latex
      (latex :variables
             latex-build-command "LatexMk")
      ;; latex-build-command "LaTeX")
-     lsp
+     ;; lsp
      ;; python
-     (python :variables
-             python-backend 'lsp
-             ;; python-backend 'anaconda
-             python-fill-column 80
-             python-sort-imports-on-save nil)
+     ;; (python :variables
+     ;;         python-backend 'lsp
+     ;;         ;; python-backend 'anaconda
+     ;;         python-fill-column 80
+     ;;         python-sort-imports-on-save nil)
 
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     helm
-     ;; ivy
+     ;; helm
+     ivy
      ;; auto-completion
      (auto-completion :variables
                       ;; can use C-l for completing selection
@@ -99,7 +101,11 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t)
      ;; better-defaults
      emacs-lisp
-     neotree
+     ;; neotree
+     (treemacs
+      :variables
+      treemacs-use-git-mode 'extended)
+
      git
      markdown
      ;; org
@@ -111,9 +117,9 @@ This function should only modify configuration layer settings."
           ;; reveal.js
           org-enable-reveal-js-support t)
 
-     (shell :variables
-            shell-default-height 20
-            shell-default-position 'bottom)
+     ;; (shell :variables
+     ;;        shell-default-height 20
+     ;;        shell-default-position 'bottom)
      spell-checking
      syntax-checking
      ;; version-control
@@ -130,8 +136,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       ;;by pcx;;
                                       ;; vetur
-                                      lsp-mode
-                                      company-lsp
+                                      ;; lsp-mode
+                                      ;; company-lsp
 
                                       academic-phrases
                                       ;; beamer
@@ -142,7 +148,7 @@ This function should only modify configuration layer settings."
                                       ;; beacon
                                       ;; monokai-theme
                                       doom-themes
-                                      interleave
+                                      ;; interleave
                                       yasnippet-snippets
                                       ;; lsp-vue
                                       ;; vue-mode
@@ -153,7 +159,7 @@ This function should only modify configuration layer settings."
                                       deft
                                       ;; exec-path-from-shell
                                       ;; darkroom
-                                      pdf-tools
+                                      ;; pdf-tools
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -165,11 +171,17 @@ This function should only modify configuration layer settings."
                                     anaconda-mode
                                     ess-R-object-popup
                                     ;;
-                                    ;; org-timer
+                                    org-timer
                                     saas-mode
                                     julia-mode
                                     fancy-battery
                                     linum
+                                    skewer-mode
+                                    stickyfunc-enhance
+                                    spray
+                                    doc-view
+                                    lorem-ipsum
+
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -540,6 +552,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; ;; this two lines are to temporary fix the issue "startup issue - use-package & ace-jump-buffer"
   ;; (push '("melpa-stable" . "stable.melpa.org/packages/") configuration-layer--elpa-archives)
   ;; (push '(use-package . "melpa-stable") package-pinned-packages)
+ ;; (setq url-proxy-services '(("http" . "127.0.0.1:7890")))
 
   (setq tramp-ssh-controlmaster-options
         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
@@ -557,16 +570,18 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    dotspacemacs-verify-spacelpa-archives t
 
    dotspacemacs-themes '(
+                         doom-solarized-light
+                         doom-nova
                          ;; doom-one
                          ;; doom-one-light
-                         ;; doom-solarized-light
                          ;; doom-nord-light
                          ;; leuven
                          spacemacs-dark
                          spacemacs-light
                          )
 
-   dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
+   ;; dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
+   dotspacemacs-mode-line-theme '(doom)
    ;; dotspacemacs-mode-line-unicode-symbols nil
 
    ;; dotspacemacs-mode-line-theme 'doom
@@ -589,10 +604,10 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;; dotspacemacs-line-numbers t
    dotspacemacs-line-numbers '(:relative t
                                          :disabled-for-modes dired-mode
-                                         doc-view-mode
+                                         ;; doc-view-mode
                                          markdown-mode
                                          org-mode
-                                         pdf-view-mode
+                                         ;; pdf-view-mode
                                          text-mode
                                          :size-limit-kb 1000)
    ;; dotspacemacs-line-numbers '(:relative t
@@ -689,6 +704,11 @@ before packages are loaded."
   ;; (global-set-key (kbd "C-x t c") 'capitalize-word)
 
 
+  (use-package all-the-icons
+    :defer t
+    )
+
+
   ;; load awesome-tab
   ;; (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/elisp"))
   ;; ;; (use-package awesome-tab)
@@ -761,9 +781,9 @@ before packages are loaded."
   ;; temporary solve the recentf lock problem by tell each emacs instance to write its recent file info to process-specific file
   ;; (setq recentf-sava-file (format "/tmp/recentf.%s" (emacs-pid)))
 
-  (use-package pdf-tools)
+  ;; (use-package pdf-tools)
 
-  (setq doc-view-resolution 192)
+  ;; (setq doc-view-resolution 192)
 
   ;; (use-package darkroom)
 
@@ -777,6 +797,7 @@ before packages are loaded."
   ;; for set flycheck to only check when save
   ;; (with-eval-after-load 'flycheck
   (use-package flycheck
+    :defer t
     :config
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     )
@@ -812,21 +833,21 @@ before packages are loaded."
 
   ;; ;; for layers ;; ;;
 
-  (use-package web-mode
-    :defer t
-    :config
-    (progn
-      (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.gotmpl\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-      (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-      ;; auto highlight for pasted code in web-mode
-      (setq web-mode-enable-auto-indentation t)
-      (add-hook 'web-mode-hook 'company-mode)
-      (add-hook 'web-mode-hook 'lsp-vue-enable)
-      )
-    )
+  ;; (use-package web-mode
+  ;;   :defer t
+  ;;   :config
+  ;;   (progn
+  ;;     (add-to-list 'auto-mode-alist '("\\.tmpl\\'" . web-mode))
+  ;;     (add-to-list 'auto-mode-alist '("\\.gotmpl\\'" . web-mode))
+  ;;     (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . web-mode))
+  ;;     (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  ;;     (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+  ;;     ;; auto highlight for pasted code in web-mode
+  ;;     (setq web-mode-enable-auto-indentation t)
+  ;;     (add-hook 'web-mode-hook 'company-mode)
+  ;;     (add-hook 'web-mode-hook 'lsp-vue-enable)
+  ;;     )
+  ;;   )
 
   ;; (setq projectile-project-search-path '(
   ;;                                        "~/Dropbox/Papers"
@@ -878,16 +899,16 @@ before packages are loaded."
   ;;   (add-to-list 'vue-mode-hook #'smartparens-mode)
   ;;   )
 
-  (use-package lsp-mode)
-  (use-package lsp-ui
-    :init
-    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-    :config
-    ;; (setq lsp-ui-sideline-enable nil)
-    (setq lsp-ui-sideline-show-hover nil)
-    )
+  ;; (use-package lsp-mode)
+  ;; (use-package lsp-ui
+  ;;   :init
+  ;;   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  ;;   :config
+  ;;   ;; (setq lsp-ui-sideline-enable nil)
+  ;;   (setq lsp-ui-sideline-show-hover nil)
+  ;;   )
 
-  (setq lsp-message-project-root-warning t) ;avoid popup warning buffer if lsp can't found root directory (such as edit simple *.py file)
+  ;; (setq lsp-message-project-root-warning t) ;avoid popup warning buffer if lsp can't found root directory (such as edit simple *.py file)
 
   ;; (use-package lsp-vue
   ;;   :config
@@ -900,25 +921,43 @@ before packages are loaded."
   ;;     ;; )
   ;;   )
 
-  (use-package company-lsp
-    :config
-    (push 'company-lsp company-backends)
-    (setq company-lsp-enable-snippet t)
-    )
+  ;; (use-package company-lsp
+  ;;   :config
+  ;;   (push 'company-lsp company-backends)
+  ;;   (setq company-lsp-enable-snippet t)
+  ;;   )
 
-  (use-package company
-    :ensure
-    :config
-    (setq company-minimum-prefix-length 1)
-    (setq company-dabbrev-downcase nil)
-    (setq company-idle-delay 0.5)
-    (setq company-idle-delay 0.5)
-    ;; (add-hook 'company-mode-hook 'company-quickhelpmode)
-    (add-to-list 'company-backends 'company-lsp))
+  ;; (use-package company
+  ;;   :ensure
+  ;;   :config
+  ;;   (setq company-minimum-prefix-length 1)
+  ;;   (setq company-dabbrev-downcase nil)
+  ;;   (setq company-idle-delay 0.5)
+  ;;   (setq company-idle-delay 0.5)
+  ;;   ;; (add-hook 'company-mode-hook 'company-quickhelpmode)
+  ;;   (add-to-list 'company-backends 'company-lsp)
+  ;;   )
 
   ;; (use-package company-quickhelp :ensure)
 
+  ;; ;; use tabnine
+  ;; (use-package company-tabnine
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-to-list 'company-backends 'company-tabnine)
+  ;;   )
+
+
+  ;; set XeTeX mode in TeX/LaTeX
+  (add-hook 'LaTeX-mode-hook 
+            (lambda()
+              (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
+              (setq TeX-command-default "XeLaTeX")
+              (setq TeX-save-query nil)
+              (setq TeX-show-compilation t)))
+
   (use-package deft
+    :defer t
     :bind ("<f8>" . deft)
     :commands (deft)
     :config (setq deft-directory "~/Dropbox/Textnotes"
@@ -928,6 +967,32 @@ before packages are loaded."
                   )
     )
 
+  ;; (use-package ox-moderncv
+  ;;   :load-path "~/.spacemacs.d/localrepos/org-cv/"
+  ;;   :init (require 'ox-moderncv))
+
+  ;; (use-package ox-altacv
+  ;;   :load-path "~/.spacemacs.d/localrepos/org-cv/ox-altacv.el"
+  ;;   :init (require 'ox-altacv))
+
+  ;; (use-package ox-hugocv
+  ;;   :load-path "~/.spacemacs.d/localrepos/org-cv/"
+  ;;   :init (require 'ox-hugocv))
+
+  ;; ;; Use keybindings
+  ;; (use-package grip-mode
+  ;;   :ensure t
+  ;;   :bind (:map markdown-mode-command-map
+  ;;               ("g" . grip-mode)))
+
+  ;; ;; Or using hooks
+  ;; (use-package grip-mode
+  ;;   :ensure t
+  ;;   :hook ((markdown-mode org-mode) . grip-mode))
+
+  (setq org-edit-src-content-indentation 0
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation t)
 
   )
 
@@ -943,11 +1008,15 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-tabnine-show-annotation t)
+ '(custom-safe-themes
+   (quote
+    ("b9dda6ca36e825766dfada5274cf18d8a5bce70676b786e3260094e0cd8c0e62" "e47c0abe03e0484ddadf2ae57d32b0f29f0b2ddfe7ec810bd6d558765d9a6a6c" default)))
  '(org-agenda-files (quote ("~/Dropbox/Papers/notes-papers.org")))
  '(org-agenda-tags-column (quote auto))
  '(package-selected-packages
    (quote
-    (gradle-mode helm-gtags ggtags counsel-gtags rust-mode yasnippet-snippets org-download evil-magit dumb-jump doom-modeline company-go centered-cursor-mode ace-window auctex counsel swiper ess flycheck company avy lsp-mode ivy helm helm-core magit visual-fill-column org-plus-contrib hydra yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-ui lorem-ipsum livid-mode live-py-mode link-hint launchctl julia-mode json-navigator js2-refactor js-doc interleave indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode doom-themes dockerfile-mode docker diminish deft cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-lsp company-auctex company-anaconda column-enforce-mode clean-aindent-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+    (grip-mode company-tabnine gradle-mode helm-gtags ggtags counsel-gtags rust-mode yasnippet-snippets org-download evil-magit dumb-jump doom-modeline company-go centered-cursor-mode ace-window auctex counsel swiper ess flycheck company avy lsp-mode ivy helm helm-core magit visual-fill-column org-plus-contrib hydra yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-ui lorem-ipsum livid-mode live-py-mode link-hint launchctl julia-mode json-navigator js2-refactor js-doc interleave indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode doom-themes dockerfile-mode docker diminish deft cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-lsp company-auctex company-anaconda column-enforce-mode clean-aindent-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-link ace-jump-helm-line academic-phrases ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
