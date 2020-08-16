@@ -46,3 +46,7 @@
 
 (global-set-key (kbd "C-c f j") (lambda () (interactive)(find-file "~/Dropbox/Textnotes/Job/job-notes.org" )))
 (which-key-add-key-based-replacements "C-c f j" "job notes")
+
+
+;;
+(org-defkey org-mode-map (kbd "SPC m /") 'helm-org-in-buffer-headings)

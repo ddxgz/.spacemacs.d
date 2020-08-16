@@ -34,9 +34,10 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(html
+     ;; rust
      (spacemacs-completion
-      :package (ivy))
+      :package (helm))
      spacemacs-layouts
      spacemacs-editing
      spacemacs-editing-visual
@@ -51,14 +52,15 @@ This function should only modify configuration layer settings."
      spacemacs-visual
 
      pcx-org
+     org-roam
      ;; restclient
-     ;; rust
-     ;; lua
+     rust
+     lua
      ;; csv
      ;; docker
      ;; plantuml
      ;; nginx
-     ;; yaml
+     yaml
      ;; If you have problem entering symbols that are behind the ⌥ key you may want to set the variables as follows. This will allow you to use the right ⌥ key to write symbols. The left ⌥ key can be used as the Meta key.
      (osx :variables osx-option-as 'meta
           osx-right-option-as 'none)
@@ -77,6 +79,7 @@ This function should only modify configuration layer settings."
             latex-build-command "LatexMk")
      ;; latex-build-command "LaTeX")
      ;; lsp
+     ;; swift
      ;; python
      ;; (python :variables
      ;;         python-backend 'lsp
@@ -89,8 +92,8 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; helm
-     ivy
+     helm
+     ;; (ivy :variables ivy-enable-advanced-buffer-information t)
      ;; auto-completion
      (auto-completion :variables
                       ;; can use C-l for completing selection
@@ -156,10 +159,12 @@ This function should only modify configuration layer settings."
                                       ;;                      :fetcher github
                                       ;;                      :repo "codefalling/vue-mode"))
                                       ;; company-quickhelp
+                                      company-tabnine
                                       deft
                                       ;; exec-path-from-shell
                                       ;; darkroom
                                       ;; pdf-tools
+                                      ;; org-roam
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -569,19 +574,28 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
    ;; (default nil)
    dotspacemacs-verify-spacelpa-archives t
 
+
+   ;; dotspacemacs-default-font '("monospace" :size 14)
+   dotspacemacs-default-font '("Source Code Pro"
+                               :size 14
+                               :weight normal
+                               :width normal)
+
    dotspacemacs-themes '(
+                         doom-one
                          doom-solarized-light
-                         doom-nova
-                         ;; doom-one
                          ;; doom-one-light
                          ;; doom-nord-light
+                         doom-nova
                          ;; leuven
                          spacemacs-dark
                          spacemacs-light
                          )
 
    ;; dotspacemacs-mode-line-theme '(spacemacs :separator slant :separator-scale 1.2)
-   dotspacemacs-mode-line-theme '(doom)
+   dotspacemacs-mode-line-theme '(doom :doom-modeline-unicode-fallback nil
+                                       :doom-modeline-enable-word-count t
+                                       :doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
    ;; dotspacemacs-mode-line-unicode-symbols nil
 
    ;; dotspacemacs-mode-line-theme 'doom
@@ -703,6 +717,9 @@ before packages are loaded."
   ;; (global-set-key (kbd "C-x t d") 'downcase-word)
   ;; (global-set-key (kbd "C-x t c") 'capitalize-word)
 
+  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-substitute)
+  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
+
 
   (use-package all-the-icons
     :defer t
@@ -801,6 +818,7 @@ before packages are loaded."
     :config
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     )
+   
 
   ;; ;; (flyspell nil)
   ;; (setq flyspell-issue-message-flag nil)
@@ -941,11 +959,13 @@ before packages are loaded."
   ;; (use-package company-quickhelp :ensure)
 
   ;; ;; use tabnine
-  ;; (use-package company-tabnine
-  ;;   :ensure t
-  ;;   :config
-  ;;   (add-to-list 'company-backends 'company-tabnine)
-  ;;   )
+  (use-package company-tabnine
+    ;; :ensure t
+    :config
+    (add-to-list 'company-backends #'company-tabnine)
+    (setq company-idle-delay 0)
+    (setq company-show-numbers t)
+    )
 
 
   ;; set XeTeX mode in TeX/LaTeX
@@ -958,14 +978,48 @@ before packages are loaded."
 
   (use-package deft
     :defer t
-    :bind ("<f8>" . deft)
+    :bind ("C-c n d" . deft)
     :commands (deft)
-    :config (setq deft-directory "~/Dropbox/Textnotes"
+    :config (setq deft-directory "~/Dropbox/Textnotes/"
                   deft-recursive t
                   deft-extensions '("md" "org")
-                  deft-use-filename-as-title t
+                  deft-use-filter-string-for-filename t
+                  deft-use-filename-as-title nil
                   )
     )
+
+  ;; (use-package org-roam
+  ;;   :hook
+  ;;   (after-init . org-roam-mode)
+  ;;   :custom
+  ;;   (org-roam-directory "~/Dropbox/org-roam")
+  ;;   (org-roam-index-file "~/Dropbox/org-roam/20200524224501-index.org")
+  ;;   :bind (:map org-roam-mode-map
+  ;;               (("C-c n l" . org-roam)
+  ;;                ("C-c n f" . org-roam-find-file)
+  ;;                ("C-c n g" . org-roam-show-graph))
+  ;;               :map org-mode-map
+  ;;               (("C-c n i" . org-roam-insert))))
+
+
+  (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/elisp"))
+  (use-package org-latex-instant-preview
+    :defer t
+    :hook (org-mode . org-latex-instant-preview-mode)
+    ;; :load-path "~/.spacemacs.d/elisp/awesome-tab.el"
+    :init
+    (setq org-latex-instant-preview-tex2svg-bin
+          ;; location of tex2svg executable
+          "~/node_modules/mathjax-node-cli/bin/tex2svg"))
+
+  ;; (use-package webkit-katex-render
+  ;;   :init
+  ;;   ;; if you use doom-emacs
+  ;;   (setq webkit-katex-render--background-color (doom-color 'bg))
+  ;;   ;; if you want to set a different path to the html client
+  ;;   (setq webkit-katex-render--client-path "PATH/TO/CLIENT.html")
+  ;;   ;; if you want to add your customized ~math-at-point~ function
+  ;;   (setq webkit-katex-render--math-at-point-function 'function))
 
   ;; (use-package ox-moderncv
   ;;   :load-path "~/.spacemacs.d/localrepos/org-cv/"
@@ -1008,19 +1062,21 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-tabnine-show-annotation t)
  '(custom-safe-themes
    (quote
-    ("b9dda6ca36e825766dfada5274cf18d8a5bce70676b786e3260094e0cd8c0e62" "e47c0abe03e0484ddadf2ae57d32b0f29f0b2ddfe7ec810bd6d558765d9a6a6c" default)))
+    ("32fd809c28baa5813b6ca639e736946579159098d7768af6c68d78ffa32063f4" "b9dda6ca36e825766dfada5274cf18d8a5bce70676b786e3260094e0cd8c0e62" "e47c0abe03e0484ddadf2ae57d32b0f29f0b2ddfe7ec810bd6d558765d9a6a6c" default)))
  '(org-agenda-files (quote ("~/Dropbox/Papers/notes-papers.org")))
  '(org-agenda-tags-column (quote auto))
+ '(org-link-translation-function (quote toc-org-unhrefify))
  '(package-selected-packages
    (quote
-    (grip-mode company-tabnine gradle-mode helm-gtags ggtags counsel-gtags rust-mode yasnippet-snippets org-download evil-magit dumb-jump doom-modeline company-go centered-cursor-mode ace-window auctex counsel swiper ess flycheck company avy lsp-mode ivy helm helm-core magit visual-fill-column org-plus-contrib hydra yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vue-mode volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode shrink-path shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-delimiters racer pyvenv pytest pyenv-mode py-isort pug-mode prettier-js popwin plantuml-mode pippel pipenv pip-requirements persp-mode pcre2el password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-ref org-projectile org-present org-pomodoro org-mime org-bullets org-brain open-junk-file nginx-mode neotree nameless multi-term move-text markdown-toc magit-svn magit-gitflow macrostep lsp-vue lsp-ui lorem-ipsum livid-mode live-py-mode link-hint launchctl julia-mode json-navigator js2-refactor js-doc interleave indent-guide importmagic impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-pydoc helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag golden-ratio godoctor go-tag go-rename go-impl go-guru go-gen-test go-fill-struct go-eldoc gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-commit gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav eldoc-eval editorconfig dotenv-mode doom-themes dockerfile-mode docker diminish deft cython-mode csv-mode counsel-projectile company-web company-tern company-statistics company-lua company-lsp company-auctex company-anaconda column-enforce-mode clean-aindent-mode cdlatex cargo auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-link ace-jump-helm-line academic-phrases ac-ispell))))
+    (ivy-rich web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode simple-httpd helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data add-node-modules-path org-roam swift-mode company-tabnine toml-mode racer helm-gtags ggtags flycheck-rust dap-mode lsp-treemacs bui lsp-mode counsel-gtags counsel swiper cargo rust-mode yasnippet-snippets ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-magit treemacs-evil toc-org symon symbol-overlay string-inflection spaceline-all-the-icons smeargle reveal-in-osx-finder restart-emacs rainbow-delimiters popwin persp-mode pcre2el password-generator paradox ox-twbs ox-gfm overseer osx-trash osx-dictionary osx-clipboard orgit org-ref org-re-reveal org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nameless move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep link-hint launchctl indent-guide hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fill-column-indicator eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-themes doom-modeline diminish devdocs deft company-statistics company-reftex company-auctex column-enforce-mode clean-aindent-mode centered-cursor-mode cdlatex auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent ace-link ace-jump-helm-line academic-phrases ac-ispell)))
+ '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(org-roam-link ((t (:inherit org-link :foreground "salmon"))))
+ '(org-roam-link-current ((t (:foreground "salmon")))))
 )

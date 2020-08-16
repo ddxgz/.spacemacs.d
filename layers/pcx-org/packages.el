@@ -36,11 +36,12 @@
       ;; (add-hook 'org-mode-hook '(lambda () (setq fill-column 80)))
       ;; (add-hook 'org-mode-hook 'turn-on-auto-fill)
 
-      (add-hook 'org-mode-hook (lambda()
-                                 (define-key
-                                   evil-insert-state-local-map
-                                   (kbd "M-RET")
-                                   #'org-meta-return)))
+      ;; try to see how's the new default
+      ;; (add-hook 'org-mode-hook (lambda()
+      ;;                            (define-key
+      ;;                              evil-insert-state-local-map
+      ;;                              (kbd "M-RET")
+      ;;                              #'org-meta-return)))
 
       (setq org-export-with-smart-quotes t)
 
@@ -60,11 +61,36 @@
       ;;
       ;; You can customize this variable to always or never include blank lines
       ;; before new entries.
-      (setq org-blank-before-new-entry
-            '(
-              ;; (heading . always)
-              (plain-list-item . nil)
-              ))
+      ;; (setq org-blank-before-new-entry
+      ;;       '(
+      ;;         ;; (heading . always)
+      ;;         (plain-list-item . nil)
+      ;;         ))
+
+      ;; use org-id for store-link, ref to
+      ;; https://stackoverflow.com/questions/27132422/reference-unique-id-across-emacs-org-mode-files
+      ;; https://github.com/emacs-helm/helm-org/pull/9
+      ;; This allows inserting links based on unique IDs if org-id-link-to-org-use-id is set to t.
+      (use-package org-id)
+      (setq org-id-link-to-org-use-id t)
+
+      ;; have completion when insert link of id:
+      ;; source: https://emacs.stackexchange.com/questions/12391/insert-org-id-link-at-point-via-outline-path-completion
+      ;; (defun org-id-complete-link (&optional arg)
+      (defun org-id-complete-link ()
+        "Create an id: link using completion"
+        (concat "id:"
+                (org-id-get-with-outline-path-completion)))
+      (org-link-set-parameters "id"
+                               :complete 'org-id-complete-link)
+
+
+
+      ;; Update ID file on startup
+      (org-id-update-id-locations '("~/Dropbox/Textnotes/Machine Learning/notes-machine-learning.org"
+                                    "~/Dropbox/Textnotes/Machine Learning/notes-machine-learning-projects.org"
+                                    "~/Dropbox/org-roam/20200610171705-nlp_topic_modeling.org"
+                                    ))
 
 
       ;; http://www.zmonster.me/2018/02/28/org-mode-capture.html
@@ -102,6 +128,10 @@
                :empty-lines 1    ; properties
                ;; :created t        ; properties
                )
+
+              ("c" "Card" entry (file "~/Dropbox/Textnotes/cards.org")
+               "* %? \n:PROPERTIES:\n:Created: %T\n:CreatedFrom:  %a\n:END:\n:Ref:\n:END:\n")
+
 
               ;; ("j" "Journal" entry (file+datetree "~/Dropbox/journal.org")
               ;;  "* %?\nEntered on %U\n  %i\n  %a")
@@ -145,17 +175,17 @@
       ;;         ;; (sequence "SENT" "APPROVED" "|" "PAID")
       ;;         ))
 
-      (setq org-todo-keyword-faces
-            '(
-              ;; ("DOIN" . "#E35DBF")
-              ;; ("DOIN" . (:foreground "red" :weight bold))
-              ("DOIN" . (:foreground "#E35DBF" :weight bold))
-              ;; ("CANC" . (:foreground "white" :background "#4d4d4d" :weight bold))
-              ;; ("DONE" . (:foreground "dark green" :weight bold :strike-through t))
-              ("DONE" . (:foreground "#84E297" :weight bold :strike-through t))
-              ("CANC" . (:foreground "grey" :weight bold :strike-through t))
-              ;; ("DELEGATED" . "pink")
-              ("PAUS" . (:foreground "base" :weight bold))))
+      ;; (setq org-todo-keyword-faces
+      ;;       '(
+      ;;         ;; ("DOIN" . "#E35DBF")
+      ;;         ;; ("DOIN" . (:foreground "red" :weight bold))
+      ;;         ("DOIN" . (:foreground "#E35DBF" :weight bold))
+      ;;         ;; ("CANC" . (:foreground "white" :background "#4d4d4d" :weight bold))
+      ;;         ;; ("DONE" . (:foreground "dark green" :weight bold :strike-through t))
+      ;;         ("DONE" . (:foreground "#84E297" :weight bold :strike-through t))
+      ;;         ("CANC" . (:foreground "grey" :weight bold :strike-through t))
+      ;;         ;; ("DELEGATED" . "pink")
+      ;;         ("PAUS" . (:foreground "base" :weight bold))))
 
 
       (setq org-tag-alist '((:startgroup . nil)
@@ -193,17 +223,21 @@
       ;; colors refer to:
       ;; https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bthemes/colors
       (add-to-list 'org-emphasis-alist
-                   '("*" (:weight bold :foreground "#d13632")
+                   ;; '("*" (:weight bold :foreground "#d13632")
+                   ;; '("*" (:weight bold :foreground "#cd2626")
+                  '("*" (:weight bold :foreground "#ECBE7B")
                      ))
       (add-to-list 'org-emphasis-alist
                    ;; '("/" (:slant italic :foreground "#1d829e")
                    ;; '("/" (:slant italic :foreground "#8a2aa7")
-                   '("/" (:slant italic :foreground "#458631")
+                   ;; '("/" (:slant italic :foreground "#458631")
+                     '("/" (:slant italic :foreground "lightskyblue")
                      ))
       (add-to-list 'org-emphasis-alist
                    ;; '("_" (:slant oblique :foreground "#96bf33")
                    ;; '("_" (:underline t :foreground "#d33264")
-                   '("_" (:underline t :foreground "#d6a525")
+                   ;; '("_" (:underline t :foreground "#d6a525")
+                     '("_" (:underline t :foreground "lightBlue")
                      ))
 
       ;; (setq org-src-fontify-natively t)
@@ -302,6 +336,7 @@
            ;; (json . t)
            (R . t)
            (python . t)
+           (swift . t)
            ))
         )
 
